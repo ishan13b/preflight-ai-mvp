@@ -69,7 +69,7 @@ export function ArchitectureReviewForm({
         </CardContent>
         <CardFooter className="gap-2">
           <Button type="submit" disabled={isSubmitting} className="px-4">
-            {isSubmitting ? "Reviewing…" : "Submit Review"}
+                {isSubmitting ? "Convening Board…" : "Convene Review Board"}
           </Button>
           {onReset ? (
             <Button

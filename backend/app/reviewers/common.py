@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from app.schemas.review import CategoryReview, Severity
+from app.schemas.review import BoardVote, CategoryReview, Severity
 
 
 @dataclass
@@ -47,17 +47,28 @@ def derive_severity(score: int, *, has_issues: bool) -> Severity:
     return Severity.LOW
 
 
+def derive_vote(score: int) -> BoardVote:
+    """Cast a board vote from a category score."""
+    if score >= 9:
+        return BoardVote.APPROVED
+    if score >= 7:
+        return BoardVote.APPROVED_WITH_CONCERNS
+    return BoardVote.REQUIRES_CHANGES
+
+
 def build_category_review(category: str, findings: ReviewFindings) -> CategoryReview:
     """Normalize findings into the shared CategoryReview contract."""
     score = clamp_score(findings.score)
     has_issues = len(findings.issues) > 0
     severity = derive_severity(score, has_issues=has_issues)
+    vote = derive_vote(score)
 
     return CategoryReview(
         category=category,
         score=score,
         confidence=clamp_confidence(findings.confidence),
         severity=severity,
+        vote=vote,
         summary=findings.summary,
         issues=list(findings.issues),
         recommendations=list(findings.recommendations),

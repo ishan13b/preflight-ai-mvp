@@ -4,6 +4,11 @@
 
 export type Severity = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 
+export type BoardVote =
+  | "APPROVED"
+  | "APPROVED WITH CONCERNS"
+  | "REQUIRES CHANGES";
+
 export interface ArchitectureReviewRequest {
   application_name: string;
   frontend: string;
@@ -22,6 +27,7 @@ export interface CategoryReview {
   score: number;
   confidence: number;
   severity: Severity;
+  vote: BoardVote;
   summary: string;
   issues: string[];
   recommendations: string[];
@@ -29,10 +35,19 @@ export interface CategoryReview {
   engineering_reasoning: string;
 }
 
+export interface ReviewerVote {
+  reviewer: string;
+  score: number;
+  vote: BoardVote;
+}
+
 export interface ArchitectureReviewResponse {
   overall_score: number;
   overall_status: string;
   overall_summary: string;
+  final_decision: BoardVote;
+  board_summary: string;
+  reviewer_votes: ReviewerVote[];
   strengths: string[];
   critical_risks: string[];
   quick_wins: string[];
@@ -51,3 +66,5 @@ export type ArchitectureReviewFormValues = {
   authentication: string;
   traffic: string;
 };
+
+export type ReviewerBoardStatus = "queued" | "reviewing" | "complete";

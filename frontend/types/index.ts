@@ -7,6 +7,9 @@ export type {
   ArchitectureReviewFormValues,
   ArchitectureReviewRequest,
   ArchitectureReviewResponse,
+  BoardVote,
   CategoryReview,
+  ReviewerBoardStatus,
+  ReviewerVote,
   Severity,
 } from "./review";

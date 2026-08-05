@@ -14,6 +14,14 @@ class Severity(StrEnum):
     CRITICAL = "CRITICAL"
 
 
+class BoardVote(StrEnum):
+    """Deterministic vote cast by a review-board member."""
+
+    APPROVED = "APPROVED"
+    APPROVED_WITH_CONCERNS = "APPROVED WITH CONCERNS"
+    REQUIRES_CHANGES = "REQUIRES CHANGES"
+
+
 class ArchitectureReviewRequest(BaseModel):
     """Inbound architecture description for deterministic review."""
 
@@ -54,11 +62,20 @@ class CategoryReview(BaseModel):
     score: int = Field(ge=0, le=10)
     confidence: int = Field(ge=0, le=100)
     severity: Severity
+    vote: BoardVote
     summary: str
     issues: list[str]
     recommendations: list[str]
     estimated_impact: str
     engineering_reasoning: str
+
+
+class ReviewerVote(BaseModel):
+    """Board-facing vote summary for a single reviewer."""
+
+    reviewer: str
+    score: int = Field(ge=0, le=10)
+    vote: BoardVote
 
 
 class ArchitectureReviewResponse(BaseModel):
@@ -67,6 +84,9 @@ class ArchitectureReviewResponse(BaseModel):
     overall_score: int = Field(ge=0, le=100)
     overall_status: str
     overall_summary: str
+    final_decision: BoardVote
+    board_summary: str
+    reviewer_votes: list[ReviewerVote]
     strengths: list[str]
     critical_risks: list[str]
     quick_wins: list[str]

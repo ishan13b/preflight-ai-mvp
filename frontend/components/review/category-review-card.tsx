@@ -37,6 +37,9 @@ export function CategoryReviewCard({ category }: CategoryReviewCardProps) {
             >
               {category.severity}
             </Badge>
+            <Badge variant="outline" className="rounded-md font-normal tracking-wide">
+              {category.vote}
+            </Badge>
           </div>
         </div>
       </CardHeader>
