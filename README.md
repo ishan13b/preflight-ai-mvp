@@ -22,7 +22,9 @@ The goal is simple:
 
 > Replace these with your actual images.
 
-![Homepage](assets/homepage.png)
+Homepage:
+<img width="512" height="320" alt="homepage" src="https://github.com/user-attachments/assets/3fb006d2-58aa-495e-adff-fbaa88382a67" />
+
 
 ---
 
@@ -80,25 +82,33 @@ PreFlight AI is my attempt at answering that question.
 
 ## Example Architectures
 
-![Examples](assets/example-architectures.png)
+<img width="512" height="205" alt="example-architectures" src="https://github.com/user-attachments/assets/a2aea40a-757b-4234-a705-ac42b4b7dc4a" />
+
 
 ---
 
 ## Design Review Board
 
-![Review Board](assets/review-board.png)
+<img width="512" height="212" alt="ai-design-review-board" src="https://github.com/user-attachments/assets/3a33f2c5-62a4-4040-80aa-bc10c9ffda62" />
+
 
 ---
 
 ## Executive Report
 
-![Executive Report](assets/executive-report.png)
+<img width="512" height="321" alt="review-board-summary" src="https://github.com/user-attachments/assets/36791897-5da6-4cf6-92f7-1593e5a9b0b9" />
+
 
 ---
 
 ## Detailed Engineering Review
 
-![Category Review](assets/category-card.png)
+<img width="512" height="375" alt="detail-report-1" src="https://github.com/user-attachments/assets/e4502ebf-84fe-4f3f-a4c8-2a3b7ac81693" />
+<img width="512" height="240" alt="detail-report-2" src="https://github.com/user-attachments/assets/92105266-51ad-4fef-9b7f-7d9a588a3302" />
+<img width="512" height="236" alt="detail-report-3" src="https://github.com/user-attachments/assets/6a7bc1ec-3e7b-4c90-b22e-99c7cc093a95" />
+<img width="512" height="241" alt="detail-report-4" src="https://github.com/user-attachments/assets/55061cd9-2a9b-4be5-a91d-a646e3700914" />
+<img width="512" height="248" alt="detail-report-5" src="https://github.com/user-attachments/assets/496e67d5-08a8-4b0b-bd5b-b8b72ab0ed35" />
+
 
 ---
 
