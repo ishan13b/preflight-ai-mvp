@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ArchitectureReviewForm } from "@/components/review/architecture-review-form";
 import { ArchitectureReviewReport } from "@/components/review/architecture-review-report";
@@ -8,6 +8,12 @@ import { BoardDecisionSummary } from "@/components/review/board-decision-summary
 import { ReviewBoard } from "@/components/review/review-board";
 import { useReviewBoard } from "@/components/review/use-review-board";
 import { ApiError } from "@/lib/errors";
+import type { ExampleArchitecture } from "@/lib/exampleArchitectures";
+import {
+  EXAMPLE_HIGHLIGHT_DURATION_MS,
+  scrollToArchitectureForm,
+  toFormValuesFromExample,
+} from "@/lib/load-example-architecture";
 import { DEFAULT_REVIEW_FORM_VALUES } from "@/lib/review-form";
 import { validateReviewForm } from "@/lib/validate-review-form";
 import { submitArchitectureReview } from "@/services/review";
@@ -23,7 +29,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export function ArchitectureReviewWorkspace() {
+type ArchitectureReviewWorkspaceProps = {
+  pendingExample?: ExampleArchitecture | null;
+  exampleLoadToken?: number;
+  onBusyChange?: (busy: boolean) => void;
+};
+
+export function ArchitectureReviewWorkspace({
+  pendingExample = null,
+  exampleLoadToken = 0,
+  onBusyChange,
+}: ArchitectureReviewWorkspaceProps) {
   const [values, setValues] = useState<ArchitectureReviewFormValues>(
     DEFAULT_REVIEW_FORM_VALUES,
   );
@@ -32,12 +48,57 @@ export function ArchitectureReviewWorkspace() {
   const [errorDetails, setErrorDetails] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sessionId, setSessionId] = useState(0);
+  const [isHighlighted, setIsHighlighted] = useState(false);
+  const [loadedExampleName, setLoadedExampleName] = useState<string | null>(
+    null,
+  );
+  const highlightTimerRef = useRef<number | null>(null);
 
   const board = useReviewBoard({
     sessionId,
     review,
     errorMessage,
   });
+
+  const isBusy = isSubmitting || board.phase === "reviewing";
+
+  useEffect(() => {
+    onBusyChange?.(isBusy);
+  }, [isBusy, onBusyChange]);
+
+  useEffect(() => {
+    if (!pendingExample || exampleLoadToken === 0) {
+      return;
+    }
+
+    setValues(toFormValuesFromExample(pendingExample));
+    setLoadedExampleName(pendingExample.name);
+    setReview(null);
+    setErrorMessage(null);
+    setErrorDetails([]);
+    setIsSubmitting(false);
+    setSessionId(0);
+    setIsHighlighted(true);
+
+    window.requestAnimationFrame(() => {
+      scrollToArchitectureForm();
+    });
+
+    if (highlightTimerRef.current !== null) {
+      window.clearTimeout(highlightTimerRef.current);
+    }
+
+    highlightTimerRef.current = window.setTimeout(() => {
+      setIsHighlighted(false);
+      highlightTimerRef.current = null;
+    }, EXAMPLE_HIGHLIGHT_DURATION_MS);
+
+    return () => {
+      if (highlightTimerRef.current !== null) {
+        window.clearTimeout(highlightTimerRef.current);
+      }
+    };
+  }, [pendingExample, exampleLoadToken]);
 
   const handleChange = (
     field: keyof ArchitectureReviewFormValues,
@@ -48,6 +109,8 @@ export function ArchitectureReviewWorkspace() {
 
   const handleReset = () => {
     setValues(DEFAULT_REVIEW_FORM_VALUES);
+    setLoadedExampleName(null);
+    setIsHighlighted(false);
     setReview(null);
     setErrorMessage(null);
     setErrorDetails([]);
@@ -96,7 +159,9 @@ export function ArchitectureReviewWorkspace() {
     <div className="grid gap-6 xl:grid-cols-[minmax(320px,380px)_minmax(0,1fr)] xl:items-start">
       <ArchitectureReviewForm
         values={values}
-        isSubmitting={isSubmitting || board.phase === "reviewing"}
+        isSubmitting={isBusy}
+        isHighlighted={isHighlighted}
+        loadedExampleName={loadedExampleName}
         onChange={handleChange}
         onSubmit={() => {
           void handleSubmit();
@@ -105,10 +170,7 @@ export function ArchitectureReviewWorkspace() {
       />
 
       <div className="space-y-4">
-        <ReviewBoard
-          members={board.members}
-          isActive={board.isBoardActive}
-        />
+        <ReviewBoard members={board.members} isActive={board.isBoardActive} />
 
         {errorMessage ? (
           <Card>
@@ -160,8 +222,8 @@ export function ArchitectureReviewWorkspace() {
             <CardHeader className="border-b">
               <CardTitle>Awaiting Convening</CardTitle>
               <CardDescription>
-                Submit the architecture form to simulate a Design Review Board
-                session (~3–5 seconds).
+                Load an example above or edit the form, then convene the Design
+                Review Board (~3–5 seconds).
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-4">

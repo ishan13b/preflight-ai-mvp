@@ -1,4 +1,4 @@
-import { ArchitectureReviewWorkspace } from "@/components/review/architecture-review-workspace";
+import { HomeExperience } from "@/components/home/home-experience";
 
 export default function HomePage() {
   return (
@@ -7,22 +7,8 @@ export default function HomePage() {
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,oklch(0.99_0.002_250),oklch(0.965_0.01_240))]"
       />
-
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-10 sm:py-14">
-        <header className="mb-8 max-w-2xl">
-          <p className="text-sm font-medium tracking-wide text-muted-foreground">
-            AI Design Review Board
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            AI Engineering Lab
-          </h1>
-          <p className="mt-3 text-base text-muted-foreground">
-            Convene a deterministic multi-reviewer board, collect votes, then
-            reveal a structured engineering report — still without LLMs.
-          </p>
-        </header>
-
-        <ArchitectureReviewWorkspace />
+      <div className="relative z-10 flex flex-1 flex-col">
+        <HomeExperience />
       </div>
     </main>
   );
