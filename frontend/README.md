@@ -1,5 +1,7 @@
 # AI Engineering Lab — Frontend
 
+**Version: v1.0.0 (v1 MVP)**
+
 Next.js application for the AI Engineering Lab platform.
 
 ## Stack

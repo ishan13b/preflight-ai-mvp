@@ -1,5 +1,7 @@
 # ✈️ PreFlight AI
 
+**Version: v1.0.0 (v1 MVP)**
+
 > **Review AI systems before they reach production.**
 
 PreFlight AI is a production-focused AI engineering review platform that analyzes AI system architectures before they are deployed.

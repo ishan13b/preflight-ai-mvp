@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     )
 
     app_name: str = "AI Engineering Lab"
-    app_version: str = "0.1.0"
+    app_version: str = "1.0.0"
     environment: str = "development"
     api_prefix: str = ""
     cors_origins: list[str] = [
