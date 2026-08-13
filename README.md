@@ -20,8 +20,6 @@ The goal is simple:
 
 # 📸 Preview
 
-> Replace these with your actual images.
-
 Homepage:
 <img width="512" height="320" alt="homepage" src="https://github.com/user-attachments/assets/3fb006d2-58aa-495e-adff-fbaa88382a67" />
 
