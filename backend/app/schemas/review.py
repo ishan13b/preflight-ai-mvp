@@ -70,6 +70,61 @@ class CategoryReview(BaseModel):
     engineering_reasoning: str
 
 
+class SecurityReviewerLLMResult(BaseModel):
+    """Structured LLM output contract for the Phase 2 security reviewer."""
+
+    score: int = Field(ge=0, le=10)
+    summary: str = Field(min_length=1)
+    engineering_reasoning: str = Field(min_length=1)
+    risks: list[str]
+    recommendations: list[str]
+    estimated_impact: str = Field(min_length=1)
+
+
+class ScalabilityReviewerLLMResult(BaseModel):
+    """Structured LLM output contract for the Phase 2 scalability reviewer."""
+
+    score: int = Field(ge=0, le=10)
+    summary: str = Field(min_length=1)
+    engineering_reasoning: str = Field(min_length=1)
+    risks: list[str]
+    recommendations: list[str]
+    estimated_impact: str = Field(min_length=1)
+
+
+class ReliabilityReviewerLLMResult(BaseModel):
+    """Structured LLM output contract for the Phase 2 reliability reviewer."""
+
+    score: int = Field(ge=0, le=10)
+    summary: str = Field(min_length=1)
+    engineering_reasoning: str = Field(min_length=1)
+    risks: list[str]
+    recommendations: list[str]
+    estimated_impact: str = Field(min_length=1)
+
+
+class ObservabilityReviewerLLMResult(BaseModel):
+    """Structured LLM output contract for the Phase 2 observability reviewer."""
+
+    score: int = Field(ge=0, le=10)
+    summary: str = Field(min_length=1)
+    engineering_reasoning: str = Field(min_length=1)
+    risks: list[str]
+    recommendations: list[str]
+    estimated_impact: str = Field(min_length=1)
+
+
+class CostReviewerLLMResult(BaseModel):
+    """Structured LLM output contract for the Phase 2 cost reviewer."""
+
+    score: int = Field(ge=0, le=10)
+    summary: str = Field(min_length=1)
+    engineering_reasoning: str = Field(min_length=1)
+    risks: list[str]
+    recommendations: list[str]
+    estimated_impact: str = Field(min_length=1)
+
+
 class ReviewerVote(BaseModel):
     """Board-facing vote summary for a single reviewer."""
 

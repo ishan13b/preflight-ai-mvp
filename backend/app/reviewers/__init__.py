@@ -6,10 +6,15 @@ Current reviewers are deterministic (rule-based) for workflow validation.
 
 from app.reviewers.base import BaseReviewer
 from app.reviewers.cost import CostReviewer
+from app.reviewers.cost_llm import CostLLMReviewer
 from app.reviewers.observability import ObservabilityReviewer
+from app.reviewers.observability_llm import ObservabilityLLMReviewer
 from app.reviewers.reliability import ReliabilityReviewer
+from app.reviewers.reliability_llm import ReliabilityLLMReviewer
 from app.reviewers.scalability import ScalabilityReviewer
+from app.reviewers.scalability_llm import ScalabilityLLMReviewer
 from app.reviewers.security import SecurityReviewer
+from app.reviewers.security_llm import SecurityLLMReviewer
 
 DEFAULT_REVIEWERS: list[BaseReviewer] = [
     ScalabilityReviewer(),
@@ -22,9 +27,14 @@ DEFAULT_REVIEWERS: list[BaseReviewer] = [
 __all__ = [
     "BaseReviewer",
     "CostReviewer",
+    "CostLLMReviewer",
     "DEFAULT_REVIEWERS",
     "ObservabilityReviewer",
+    "ObservabilityLLMReviewer",
     "ReliabilityReviewer",
+    "ReliabilityLLMReviewer",
     "ScalabilityReviewer",
+    "ScalabilityLLMReviewer",
+    "SecurityLLMReviewer",
     "SecurityReviewer",
 ]

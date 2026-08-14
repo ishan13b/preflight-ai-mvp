@@ -21,5 +21,10 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
     ]
 
+    # Phase 2 LLM reviewer settings (server-side only).
+    openai_api_key: str | None = None
+    openai_model: str = "gpt-4.1-mini"
+    openai_timeout_seconds: float = 30.0
+
 
 settings = Settings()
