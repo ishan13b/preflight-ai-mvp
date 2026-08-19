@@ -259,9 +259,17 @@ class LLMReviewOrchestratorTests(unittest.TestCase):
             "score": 8,
             "summary": "Valid result",
             "engineering_reasoning": "Valid reasoning",
-            "risks": [],
+            "findings": [
+                {
+                    "statement": "Token abuse controls are not fully specified.",
+                    "evidence_basis": "NOT_SPECIFIED",
+                    "severity_hint": "MEDIUM",
+                }
+            ],
             "recommendations": ["Valid recommendation"],
             "estimated_impact": "Valid impact",
+            "score_rationale": "Default mocked rationale.",
+            "severity_rationale": "Default mocked severity rationale.",
         }
 
         orchestrator = LLMReviewOrchestrator.from_provider(provider)

@@ -7,6 +7,9 @@ from app.reviewers.scalability_llm import ScalabilityLLMReviewer
 from app.schemas.review import (
     ArchitectureReviewRequest,
     BoardVote,
+    EvidenceBasis,
+    LLMReviewerFinding,
+    Severity,
     ScalabilityReviewerLLMResult,
 )
 from app.services.llm.provider import LLMProvider, LLMProviderError
@@ -36,9 +39,17 @@ class ScalabilityLLMReviewerTests(unittest.TestCase):
                 "Redis and queueing reduce repeated work, but inference capacity can "
                 "become a bottleneck during concurrent bursts."
             ),
-            risks=["Inference workers may saturate during traffic spikes"],
+            findings=[
+                LLMReviewerFinding(
+                    statement="Inference workers may saturate during traffic spikes",
+                    evidence_basis=EvidenceBasis.INFERRED_RISK,
+                    severity_hint=Severity.MEDIUM,
+                )
+            ],
             recommendations=["Add autoscaling based on queue depth and latency"],
             estimated_impact="Throughput plateaus and p95 latency rises under spikes.",
+            score_rationale="Primary scaling risk is inferred from traffic and inference profile.",
+            severity_rationale="Risk is credible but partially mitigated by cache and async backend.",
         )
 
         reviewer = ScalabilityLLMReviewer(provider, confidence=83)
@@ -65,9 +76,17 @@ class ScalabilityLLMReviewerTests(unittest.TestCase):
                 "Horizontal autoscaling, cache coverage, and async work partitioning "
                 "provide healthy headroom."
             ),
-            risks=[],
+            findings=[
+                LLMReviewerFinding(
+                    statement="Queue burst behavior is not specified; validate backpressure under peak load.",
+                    evidence_basis=EvidenceBasis.NOT_SPECIFIED,
+                    severity_hint=Severity.LOW,
+                )
+            ],
             recommendations=["Keep load testing as traffic grows"],
             estimated_impact="Low near-term risk of throughput collapse.",
+            score_rationale="Current controls suggest strong headroom with minor unknowns.",
+            severity_rationale="Unspecified burst controls are low impact pending validation.",
         )
 
         category = ScalabilityLLMReviewer(provider).review(self.request)
@@ -81,9 +100,11 @@ class ScalabilityLLMReviewerTests(unittest.TestCase):
             "score": 11,
             "summary": "invalid",
             "engineering_reasoning": "invalid",
-            "risks": [],
+            "findings": [],
             "recommendations": [],
             "estimated_impact": "invalid",
+            "score_rationale": "invalid",
+            "severity_rationale": "invalid",
         }
 
         with self.assertRaises(ValidationError):
@@ -104,9 +125,17 @@ class ScalabilityLLMReviewerTests(unittest.TestCase):
             score=7,
             summary="Some scalability concerns are present.",
             engineering_reasoning="Queueing is present but backpressure behavior is unclear.",
-            risks=["Backpressure handling is underspecified"],
+            findings=[
+                LLMReviewerFinding(
+                    statement="Backpressure handling is underspecified",
+                    evidence_basis=EvidenceBasis.NOT_SPECIFIED,
+                    severity_hint=Severity.MEDIUM,
+                )
+            ],
             recommendations=["Define queue limits and failure behavior"],
             estimated_impact="Latency spikes under sustained concurrency.",
+            score_rationale="Unknown queue behavior can degrade p95 at high concurrency.",
+            severity_rationale="Risk is not confirmed but likely under burst traffic.",
         )
 
         ScalabilityLLMReviewer(provider).review(self.request)

@@ -13,6 +13,15 @@ StructuredResultT = TypeVar("StructuredResultT", bound=BaseModel)
 class LLMProviderError(RuntimeError):
     """Raised when structured generation fails in an LLM provider."""
 
+    def __init__(
+        self,
+        message: str,
+        *,
+        diagnostics: dict[str, object] | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.diagnostics = diagnostics
+
 
 class LLMProvider(ABC):
     """Minimal provider interface for reviewer structured generation."""

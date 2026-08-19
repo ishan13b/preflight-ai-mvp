@@ -1,0 +1,413 @@
+{
+  "dataset_id": "preflight-phase2-llm-reviewer-reference-v1",
+  "dataset_version": "1.0.0",
+  "description": "Human-authored reference findings for comparing deterministic and LLM reviewers on core example architectures.",
+  "source": {
+    "examples_file": "frontend/lib/exampleArchitectures.ts",
+    "authoring_note": "References are intentionally independent from current reviewer outputs."
+  },
+  "categories": [
+    "Security",
+    "Scalability",
+    "Reliability",
+    "Observability",
+    "Cost"
+  ],
+  "scenarios": [
+    {
+      "scenario_id": "customer-support-rag",
+      "scenario_name": "Customer Support RAG",
+      "architecture_source_id": "customer-support-rag",
+      "architecture": {
+        "application_name": "Customer Support RAG",
+        "frontend": "React",
+        "backend": "FastAPI",
+        "llm": "GPT-5.5",
+        "vector_db": "Pinecone",
+        "embeddings": "BGE Large",
+        "cache": "Redis",
+        "monitoring": "Langfuse",
+        "authentication": "JWT",
+        "traffic": 5000
+      },
+      "category_expectations": {
+        "Security": {
+          "expected_findings": [
+            {
+              "finding": "JWT is a reasonable baseline, but token scope, expiry, and rotation controls are not specified and should be explicitly validated for external support workflows.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "expected_severity": "MEDIUM",
+              "importance": "MINOR_ISSUE",
+              "why_it_matters": "Support systems often expose sensitive customer context and can be abused for prompt injection and account-level data access if token controls are weak.",
+              "recommendation_focus": "Harden JWT lifecycle, enforce least-privilege scopes, and add abuse-rate controls on user-facing endpoints."
+            }
+          ]
+        },
+        "Scalability": {
+          "expected_findings": [
+            {
+              "finding": "From the provided summary, Redis indicates a cache layer and no obvious immediate scalability blocker is visible, but throughput headroom and bottlenecks are not specified.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "expected_severity": "LOW",
+              "importance": "ACCEPTABLE",
+              "why_it_matters": "Caching is one of the strongest controls against repetitive inference and retrieval amplification in support use cases.",
+              "recommendation_focus": "Validate p95 latency and queue behavior under bursty ticket spikes with load tests."
+            }
+          ]
+        },
+        "Reliability": {
+          "expected_findings": [
+            {
+              "finding": "Core reliability posture is workable, but fallback behavior for LLM/provider and vector retrieval failures is not visible in the architecture summary.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "expected_severity": "MEDIUM",
+              "importance": "MINOR_ISSUE",
+              "why_it_matters": "Without graceful degradation, support tooling can fail hard during upstream incidents and block agent workflows.",
+              "recommendation_focus": "Define timeout/retry budgets, user-safe fallback responses, and degraded-mode behavior for retrieval/LLM errors."
+            }
+          ]
+        },
+        "Observability": {
+          "expected_findings": [
+            {
+              "finding": "Langfuse indicates meaningful LLM-path telemetry, but cross-service correlation between API, retrieval, and model calls still needs explicit trace strategy.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "expected_severity": "MEDIUM",
+              "importance": "MINOR_ISSUE",
+              "why_it_matters": "Operational teams need end-to-end visibility to isolate latency regressions and answer-quality incidents quickly.",
+              "recommendation_focus": "Add distributed traces with stable request IDs linking backend, retrieval, and LLM spans."
+            }
+          ]
+        },
+        "Cost": {
+          "expected_findings": [
+            {
+              "finding": "Cost profile may be manageable with caching, but GPT-5.5 usage can still become a primary driver if prompt and retrieval efficiency are not controlled.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "MEDIUM",
+              "importance": "MINOR_ISSUE",
+              "why_it_matters": "Model spend can outpace traffic growth when prompt payloads and repeated retrieval are not optimized.",
+              "recommendation_focus": "Track token-per-resolution metrics and add prompt/retrieval optimization guardrails."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenario_id": "ai-coding-assistant",
+      "scenario_name": "AI Coding Assistant",
+      "architecture_source_id": "ai-coding-assistant",
+      "architecture": {
+        "application_name": "AI Coding Assistant",
+        "frontend": "Next.js",
+        "backend": "FastAPI",
+        "llm": "Claude",
+        "vector_db": "PostgreSQL",
+        "embeddings": "Code Embeddings",
+        "cache": "Redis",
+        "monitoring": "None",
+        "authentication": "JWT",
+        "traffic": 2500
+      },
+      "category_expectations": {
+        "Security": {
+          "expected_findings": [
+            {
+              "finding": "JWT baseline is acceptable, but repository-oriented assistant workflows likely require stronger authorization boundaries than authentication alone.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "expected_severity": "MEDIUM",
+              "importance": "MINOR_ISSUE",
+              "why_it_matters": "Code and repo metadata are high-value assets; weak authorization can leak proprietary source material.",
+              "recommendation_focus": "Add repo-scoped authorization checks, audit logging, and permission-aware tool execution boundaries."
+            }
+          ]
+        },
+        "Scalability": {
+          "expected_findings": [
+            {
+              "finding": "Redis improves scalability, but PostgreSQL-backed retrieval for code-heavy workloads can become a throughput bottleneck under larger corpora or concurrent indexing.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "MEDIUM",
+              "importance": "MINOR_ISSUE",
+              "why_it_matters": "Developer-assistant latency often depends on retrieval speed and index update behavior.",
+              "recommendation_focus": "Validate retrieval/index scaling limits and plan partitioning or dedicated vector retrieval architecture if corpus grows."
+            }
+          ]
+        },
+        "Reliability": {
+          "expected_findings": [
+            {
+              "finding": "No explicit monitoring plus a model/retrieval dependency chain creates incident-detection and recovery risk for the declared workload.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Assistant outages or degraded quality can silently impact engineering velocity if reliability signals are missing.",
+              "recommendation_focus": "Define retries/timeouts, degraded-mode responses, and runbook-driven recovery triggers."
+            }
+          ]
+        },
+        "Observability": {
+          "expected_findings": [
+            {
+              "finding": "Monitoring is unset, leaving blind spots for latency spikes, model failures, and retrieval regressions.",
+              "evidence_basis": "OBSERVED",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Without observability, diagnosing whether issues stem from model provider, retrieval, or application code is slow and error-prone.",
+              "recommendation_focus": "Implement structured logs, service metrics, and distributed traces across coding-assistant request paths."
+            }
+          ]
+        },
+        "Cost": {
+          "expected_findings": [
+            {
+              "finding": "Cost posture has meaningful risk: cache helps, but coding assistants can drive elevated token usage from long context windows and iterative prompts.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "MEDIUM",
+              "importance": "MINOR_ISSUE",
+              "why_it_matters": "Token-heavy workflows can materially change unit economics even at mid-level traffic.",
+              "recommendation_focus": "Add token budget controls, prompt compaction strategy, and per-feature cost attribution."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenario_id": "financial-copilot",
+      "scenario_name": "Financial Copilot",
+      "architecture_source_id": "financial-copilot",
+      "architecture": {
+        "application_name": "Financial Copilot",
+        "frontend": "React",
+        "backend": "FastAPI",
+        "llm": "GPT-5.5",
+        "vector_db": "Pinecone",
+        "embeddings": "text-embedding-3-large",
+        "cache": "None",
+        "monitoring": "AWS",
+        "authentication": "JWT",
+        "traffic": 3000
+      },
+      "category_expectations": {
+        "Security": {
+          "expected_findings": [
+            {
+              "finding": "Authentication exists, but finance-oriented assistant use cases typically need strict data access controls and high-confidence auditability beyond baseline JWT.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Sensitive financial context increases blast radius for data leakage, over-broad access, or untraceable actions.",
+              "recommendation_focus": "Strengthen authorization policy, key management, and compliance-oriented audit controls."
+            }
+          ]
+        },
+        "Scalability": {
+          "expected_findings": [
+            {
+              "finding": "No caching with the declared traffic value can create repeated model and retrieval work that degrades latency and throughput as load grows.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Financial workflows often involve repeated lookups and what-if prompts that benefit strongly from memoization.",
+              "recommendation_focus": "Introduce cache strategy for retrieval and response reuse with invalidation rules."
+            }
+          ]
+        },
+        "Reliability": {
+          "expected_findings": [
+            {
+              "finding": "AWS monitoring suggests some operational visibility, but reliability risk remains high without clear fallback behavior for LLM or vector dependency failures.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "expected_severity": "MEDIUM",
+              "importance": "MINOR_ISSUE",
+              "why_it_matters": "In finance contexts, partial outages and stale retrieval can produce misleading outputs at high consequence.",
+              "recommendation_focus": "Define fail-safe responses, timeout budgets, and consistency checks for degraded upstream dependencies."
+            }
+          ]
+        },
+        "Observability": {
+          "expected_findings": [
+            {
+              "finding": "Monitoring is present (AWS), but AI-specific visibility requirements are likely underdefined for prompt, retrieval quality, and model behavior tracking.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "expected_severity": "MEDIUM",
+              "importance": "MINOR_ISSUE",
+              "why_it_matters": "Generic infrastructure telemetry often misses AI failure modes such as retrieval drift or model output instability.",
+              "recommendation_focus": "Add AI-path telemetry: retrieval quality indicators, model-call traces, and actionable SLOs."
+            }
+          ]
+        },
+        "Cost": {
+          "expected_findings": [
+            {
+              "finding": "No caching with GPT-5.5 and retrieval-dependent flows is a likely cost driver; actual impact depends on measured request mix, token usage, and retrieval frequency.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Without cache controls, repeated inference and retrieval work can raise spend materially, but workload measurements are needed to calibrate magnitude.",
+              "recommendation_focus": "Prioritize caching, retrieval optimization, and cost guardrails tied to usage patterns."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenario_id": "enterprise-search",
+      "scenario_name": "Enterprise Search",
+      "architecture_source_id": "enterprise-search",
+      "architecture": {
+        "application_name": "Enterprise Search",
+        "frontend": "React",
+        "backend": "FastAPI",
+        "llm": "OpenAI",
+        "vector_db": "Elasticsearch",
+        "embeddings": "Hybrid Search",
+        "cache": "Redis",
+        "monitoring": "None",
+        "authentication": "None",
+        "traffic": 12000
+      },
+      "category_expectations": {
+        "Security": {
+          "expected_findings": [
+            {
+              "finding": "Missing authentication in an enterprise knowledge system with sustained traffic is a critical blocker.",
+              "evidence_basis": "OBSERVED",
+              "expected_severity": "CRITICAL",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Unauthenticated enterprise search can expose sensitive internal knowledge and enable abuse at scale.",
+              "recommendation_focus": "Enforce strong authn/authz before launch, including tenant/user scoping and access auditing."
+            }
+          ]
+        },
+        "Scalability": {
+          "expected_findings": [
+            {
+              "finding": "The declared traffic value with FastAPI and hybrid retrieval indicates potential scaling pressure that should be validated with explicit horizontal scaling and backpressure strategy.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Search workloads can produce bursty concurrent requests and retrieval fan-out that overloads request-serving capacity.",
+              "recommendation_focus": "Define scale-out thresholds, queue/backpressure behavior, and retrieval throughput limits."
+            }
+          ]
+        },
+        "Reliability": {
+          "expected_findings": [
+            {
+              "finding": "No monitoring at this traffic level materially increases incident response risk and hides partial failure modes.",
+              "evidence_basis": "OBSERVED",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Without visibility, dependency failures or degraded retrieval quality can persist unnoticed.",
+              "recommendation_focus": "Implement detection for dependency failures, latency/error SLOs, and degraded-mode operations."
+            }
+          ]
+        },
+        "Observability": {
+          "expected_findings": [
+            {
+              "finding": "Observability is a major gap: monitoring and tracing are absent for a complex retrieval + model path.",
+              "evidence_basis": "OBSERVED",
+              "expected_severity": "CRITICAL",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Root-cause analysis for search relevance, latency, and model failures is infeasible without instrumentation.",
+              "recommendation_focus": "Add structured logs, distributed traces, and AI/retrieval-specific diagnostics with alerting."
+            }
+          ]
+        },
+        "Cost": {
+          "expected_findings": [
+            {
+              "finding": "Cost risk is significant because sustained traffic plus model-enabled search can drive substantial spend unless cost controls and measurement are in place, even with Redis.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Enterprise search patterns can generate sustained high throughput that magnifies model and retrieval spend.",
+              "recommendation_focus": "Introduce query/result caching tiers, routing controls for expensive paths, and cost anomaly alerts."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenario_id": "multi-agent-research",
+      "scenario_name": "Multi-Agent Research System",
+      "architecture_source_id": "multi-agent-research",
+      "architecture": {
+        "application_name": "Multi-Agent Research System",
+        "frontend": "Next.js",
+        "backend": "FastAPI",
+        "llm": "Multiple LLMs via LangGraph",
+        "vector_db": "PostgreSQL",
+        "embeddings": "OpenAI Embeddings",
+        "cache": "Redis",
+        "monitoring": "None",
+        "authentication": "JWT",
+        "traffic": 8000
+      },
+      "category_expectations": {
+        "Security": {
+          "expected_findings": [
+            {
+              "finding": "JWT baseline is acceptable, but multi-agent tool orchestration introduces elevated privilege and data-flow risk that needs stricter authorization boundaries.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Inter-agent tasking can accidentally expand access scope or leak intermediate sensitive context.",
+              "recommendation_focus": "Define agent-level permission boundaries, tool allowlists, and audit trails for delegated actions."
+            }
+          ]
+        },
+        "Scalability": {
+          "expected_findings": [
+            {
+              "finding": "Scalability risk is present: Redis helps, but multi-agent fan-out can amplify concurrent model and retrieval demand under load.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Agent workflows can multiply downstream calls per user request, stressing backend throughput and queue capacity.",
+              "recommendation_focus": "Introduce concurrency limits, queue-based orchestration, and per-workflow fan-out controls."
+            }
+          ]
+        },
+        "Reliability": {
+          "expected_findings": [
+            {
+              "finding": "No monitoring plus multi-step dependency chains creates high reliability risk and difficult recovery behavior.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Partial failures in one agent or provider can silently cascade into incorrect or incomplete final outputs.",
+              "recommendation_focus": "Add workflow-level retries/timeouts, idempotency protections, and explicit degraded completion behavior."
+            }
+          ]
+        },
+        "Observability": {
+          "expected_findings": [
+            {
+              "finding": "Observability is a major concern: complex multi-agent reasoning paths require correlated traces and stage-level telemetry that are absent.",
+              "evidence_basis": "OBSERVED",
+              "expected_severity": "CRITICAL",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Without end-to-end traces, diagnosing hallucinations, latency spikes, or tool-chain failures is impractical.",
+              "recommendation_focus": "Instrument per-agent spans, handoff metadata, and outcome quality/error signals with alerting."
+            }
+          ]
+        },
+        "Cost": {
+          "expected_findings": [
+            {
+              "finding": "Cost risk is major because multi-agent fan-out can multiply downstream model calls per request for this architecture.",
+              "evidence_basis": "INFERRED_RISK",
+              "expected_severity": "HIGH",
+              "importance": "MAJOR_ISSUE",
+              "why_it_matters": "Per-request cost can increase substantially when several agents call expensive models and retrieval paths.",
+              "recommendation_focus": "Add routing/budget limits per workflow, cap iterative loops, and monitor blended cost per successful task."
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

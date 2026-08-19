@@ -79,6 +79,13 @@ Implemented:
 - Reviewer-level failure isolation with normalized success/failure outcomes
 - Orchestration result contract for complete/partial/failed board evidence
 - Focused mocked tests for provider, shared helper, and implemented reviewers
+- Phase 2.0 frozen evaluation baseline artifacts (evaluation + adjudication + analysis)
+- Phase 2.1 calibration experiment completion (25/25 evaluation success + adjudication)
+- Phase 2.1 validator robustness fix and passing test suite (`75` tests)
+- Phase 2.2 evidence-basis separation intervention and follow-on robustness clarifications (prompt + validator wording-recognition hardening)
+- Phase 2.2 clean 3-case live preflight gate (Security/Cost/Reliability all SUCCESS with validator PASS)
+- Phase 2.2 controlled 25-case run artifact recorded (`19` SUCCESS / `6` validation failures)
+- Phase 2.2 partial human adjudication artifact recorded (`19` adjudicated / `6` non-adjudicable validation failures) with frozen rubric unchanged
 
 Not yet implemented:
 - LLM moderator/synthesizer
@@ -89,6 +96,11 @@ Not yet implemented:
 - Broader Production AI Engineering Reviewer modules
 
 v1 deterministic reviewers remain the Phase 2 evaluation baseline.
+
+Current experimental interpretation:
+- Phase 2.1 delivered a strong severity-calibration gain and slight category-relevance improvement with preserved alignment/usefulness, but evidence discipline remained mixed.
+- Phase 2.2 has completed a controlled 25-case run, but only `19/25` cases are semantically adjudicable due to `6` deterministic validation failures.
+- Do not treat Phase 2.2 as successful or failed yet; official apples-to-apples cross-phase percentage comparison is not established until methodology for incomplete adjudication denominator is resolved.
 
 ## Important constraints
 

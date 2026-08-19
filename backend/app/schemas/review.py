@@ -1,8 +1,16 @@
 """Architecture review request and response schemas."""
 
 from enum import StrEnum
+import re
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import (
+    BaseModel,
+    Field,
+    PrivateAttr,
+    ValidationInfo,
+    field_validator,
+    model_validator,
+)
 
 
 class Severity(StrEnum):
@@ -12,6 +20,14 @@ class Severity(StrEnum):
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
     CRITICAL = "CRITICAL"
+
+
+class EvidenceBasis(StrEnum):
+    """Evidence discipline marker for LLM reviewer findings."""
+
+    OBSERVED = "OBSERVED"
+    NOT_SPECIFIED = "NOT_SPECIFIED"
+    INFERRED_RISK = "INFERRED_RISK"
 
 
 class BoardVote(StrEnum):
@@ -68,61 +84,148 @@ class CategoryReview(BaseModel):
     recommendations: list[str]
     estimated_impact: str
     engineering_reasoning: str
+    _llm_structured_result: dict[str, object] | None = PrivateAttr(default=None)
+
+    def attach_llm_structured_result(self, payload: dict[str, object]) -> None:
+        """Attach LLM structured payload for downstream diagnostics/evaluation."""
+        self._llm_structured_result = payload
+
+    def get_llm_structured_result(self) -> dict[str, object] | None:
+        """Return attached LLM structured payload when available."""
+        return self._llm_structured_result
 
 
-class SecurityReviewerLLMResult(BaseModel):
+class LLMReviewerFinding(BaseModel):
+    """Structured finding produced by an LLM category reviewer."""
+
+    statement: str = Field(min_length=1)
+    evidence_basis: EvidenceBasis
+    severity_hint: Severity
+    confidence: int | None = Field(default=None, ge=0, le=100)
+    category_relevance_note: str | None = None
+
+    @model_validator(mode="after")
+    def validate_statement_matches_evidence_basis(self) -> "LLMReviewerFinding":
+        statement_lc = self.statement.lower()
+
+        if self.evidence_basis == EvidenceBasis.NOT_SPECIFIED:
+            # NOT_SPECIFIED is primarily declared by evidence_basis; deterministic
+            # checks here focus on contradictions and obvious mixed-basis claims.
+
+            assertive_absence_patterns = (
+                r"\blacks?\b",
+                r"\bis missing\b",
+                r"\b(is|are)\s+absent\b",
+                r"\bdoes not have\b",
+                r"\b(has|have)\s+no\b.{0,40}\b(control|controls|policy|monitoring|auth|authentication|authorization|encryption|logging|retry|fallback|guardrail|guardrails)\b",
+                r"\b(there is|there's)\s+no\s+(?!(information|specification|detail|details|mention)\b).{0,40}\b(control|controls|policy|monitoring|auth|authentication|authorization|encryption|logging|retry|fallback|guardrail|guardrails)\b",
+                r"\bwithout\b.{0,40}\b(control|controls|policy|monitoring|auth|authorization|encryption|logging|retry|fallback|guardrail|guardrails)\b",
+                r"\bno\b.{0,40}\b(implemented|in place|present|configured)\b",
+            )
+            if any(re.search(pattern, statement_lc) for pattern in assertive_absence_patterns):
+                raise ValueError(
+                    "NOT_SPECIFIED finding statements must not assert proven absence."
+                )
+
+            uncertainty_markers = (
+                r"\bnot\s+specified\b",
+                r"\bnot\s+detailed\b",
+                r"\bdoes\s+not\s+specify\b",
+                r"\bdoes\s+not\s+detail\b",
+                r"\bno\s+explicit\s+mention\b",
+                r"\bno\s+information\b.{0,80}\bprovided\b",
+                r"\bwithout\s+stated\b",
+            )
+            inferred_impact_markers = (
+                r"\bcreating\b",
+                r"\bleading\s+to\b",
+                r"\bresulting\s+in\b",
+                r"\bcausing\b",
+                r"\bwhich\s+could\b",
+                r"\bcould\s+lead\b",
+                r"\brisk\s+of\b",
+            )
+            has_uncertainty_marker = any(
+                re.search(pattern, statement_lc) for pattern in uncertainty_markers
+            )
+            has_inferred_impact_marker = any(
+                re.search(pattern, statement_lc) for pattern in inferred_impact_markers
+            )
+            if has_uncertainty_marker and has_inferred_impact_marker:
+                raise ValueError(
+                    "NOT_SPECIFIED finding statements must not combine uncertainty with inferred impact; use separate INFERRED_RISK finding."
+                )
+
+        if self.evidence_basis == EvidenceBasis.INFERRED_RISK:
+            # Inferred risk findings should use qualified, conditional language.
+            inference_cues = (
+                "could",
+                "may",
+                "might",
+                "can",
+                "likely",
+                "potential",
+                "risk",
+                "if ",
+                "possible",
+            )
+            if not any(cue in statement_lc for cue in inference_cues):
+                raise ValueError(
+                    "INFERRED_RISK finding statements must include qualified/conditional language."
+                )
+
+        return self
+
+
+class LLMReviewerResultBase(BaseModel):
+    """Shared structured LLM output contract for category reviewers."""
+
+    score: int = Field(ge=0, le=10)
+    summary: str = Field(min_length=1)
+    engineering_reasoning: str = Field(min_length=1)
+    findings: list[LLMReviewerFinding] = Field(default_factory=list)
+    # Backward compatibility for previously mocked responses that only emit string risks.
+    risks: list[str] | None = None
+    recommendations: list[str]
+    estimated_impact: str = Field(min_length=1)
+    score_rationale: str = Field(min_length=1)
+    severity_rationale: str = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_findings_or_risks_present(
+        self, info: ValidationInfo
+    ) -> "LLMReviewerResultBase":
+        require_structured_findings = bool(
+            (info.context or {}).get("require_structured_findings")
+        )
+        if require_structured_findings and not self.findings:
+            raise ValueError(
+                "Phase 2.1 runtime requires structured findings; "
+                "legacy risks-only payload is not allowed."
+            )
+        if not self.findings and not self.risks:
+            raise ValueError("At least one finding or legacy risk is required.")
+        return self
+
+
+class SecurityReviewerLLMResult(LLMReviewerResultBase):
     """Structured LLM output contract for the Phase 2 security reviewer."""
 
-    score: int = Field(ge=0, le=10)
-    summary: str = Field(min_length=1)
-    engineering_reasoning: str = Field(min_length=1)
-    risks: list[str]
-    recommendations: list[str]
-    estimated_impact: str = Field(min_length=1)
 
-
-class ScalabilityReviewerLLMResult(BaseModel):
+class ScalabilityReviewerLLMResult(LLMReviewerResultBase):
     """Structured LLM output contract for the Phase 2 scalability reviewer."""
 
-    score: int = Field(ge=0, le=10)
-    summary: str = Field(min_length=1)
-    engineering_reasoning: str = Field(min_length=1)
-    risks: list[str]
-    recommendations: list[str]
-    estimated_impact: str = Field(min_length=1)
 
-
-class ReliabilityReviewerLLMResult(BaseModel):
+class ReliabilityReviewerLLMResult(LLMReviewerResultBase):
     """Structured LLM output contract for the Phase 2 reliability reviewer."""
 
-    score: int = Field(ge=0, le=10)
-    summary: str = Field(min_length=1)
-    engineering_reasoning: str = Field(min_length=1)
-    risks: list[str]
-    recommendations: list[str]
-    estimated_impact: str = Field(min_length=1)
 
-
-class ObservabilityReviewerLLMResult(BaseModel):
+class ObservabilityReviewerLLMResult(LLMReviewerResultBase):
     """Structured LLM output contract for the Phase 2 observability reviewer."""
 
-    score: int = Field(ge=0, le=10)
-    summary: str = Field(min_length=1)
-    engineering_reasoning: str = Field(min_length=1)
-    risks: list[str]
-    recommendations: list[str]
-    estimated_impact: str = Field(min_length=1)
 
-
-class CostReviewerLLMResult(BaseModel):
+class CostReviewerLLMResult(LLMReviewerResultBase):
     """Structured LLM output contract for the Phase 2 cost reviewer."""
-
-    score: int = Field(ge=0, le=10)
-    summary: str = Field(min_length=1)
-    engineering_reasoning: str = Field(min_length=1)
-    risks: list[str]
-    recommendations: list[str]
-    estimated_impact: str = Field(min_length=1)
 
 
 class ReviewerVote(BaseModel):

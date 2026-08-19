@@ -118,3 +118,33 @@ Reviewer
 **Decision:** Keep the deterministic v1 board intact while developing Phase 2, with LLM review able to run as a separate path.
 
 **Why:** This preserves the baseline and enables later quality/regression comparisons between deterministic and LLM review behavior.
+
+## Phase 2.0 baseline is frozen for comparison
+
+**Decision:** Treat Phase 2.0 evaluation, adjudication, and analysis artifacts as immutable baseline references.
+
+**Why:** Phase-to-phase comparisons must remain reproducible and auditable against a fixed benchmark.
+
+## Phase 2.1 outcome interpretation
+
+**Decision:** Record Phase 2.1 as a mixed result with a strong positive component rather than an unconditional success.
+
+**Why:** Adjudication shows major severity-calibration improvement and slight category-relevance improvement, but evidence discipline did not improve.
+
+## Phase 2.2 starts as a minimal prompt-only intervention
+
+**Decision:** Introduce Phase 2.2 evidence-basis separation through shared prompt guidance first, without schema/provider/runner redesign.
+
+**Why:** This isolates one variable for the experiment and directly targets the dominant Phase 2.1 failure mode (unspecified detail -> asserted deficiency/risk).
+
+## Phase 2.2 validator is an integrity layer, not a semantic scorer
+
+**Decision:** Keep Phase 2.2 validator checks focused on evidence-basis contract integrity (asserted-absence contradiction checks and mixed-basis guardrails), not broad natural-language semantic grading.
+
+**Why:** The experiment evaluates model behavior using structured outputs plus human adjudication. The deterministic validator should prevent obvious label/content mismatches without becoming a brittle second evaluator.
+
+## Phase 2.2 partial adjudication is not official cross-phase metric output
+
+**Decision:** Treat the Phase 2.2 partial adjudication set (`19` adjudicated / `6` non-adjudicable validation failures) as internal evidence, not as official apples-to-apples phase-level percentages.
+
+**Why:** Frozen Phase 2.0/2.1 methodology assumes `25` adjudicated records and uses `25` as denominator for dimension distributions. Reporting official Phase 2.2 percentages on denominator `19` would break strict comparability unless methodology is explicitly revised.

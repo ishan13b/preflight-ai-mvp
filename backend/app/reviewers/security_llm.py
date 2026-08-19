@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from app.reviewers.base import BaseReviewer
-from app.reviewers.llm_shared import run_llm_category_review
+from app.reviewers.llm_shared import build_calibrated_instruction, run_llm_category_review
 from app.schemas.review import (
     ArchitectureReviewRequest,
     CategoryReview,
@@ -11,7 +11,7 @@ from app.schemas.review import (
 )
 from app.services.llm.provider import LLMProvider
 
-_SECURITY_SYSTEM_INSTRUCTION = """
+_SECURITY_BASE_SYSTEM_INSTRUCTION = """
 You are the Security reviewer for PreFlight AI's architecture Design Review Board.
 Evaluate ONLY security posture of the submitted architecture.
 
@@ -30,6 +30,14 @@ Focus on:
 Return only the structured fields requested by the response schema.
 Keep risks and recommendations concise and actionable.
 """.strip()
+
+_SECURITY_SYSTEM_INSTRUCTION = build_calibrated_instruction(
+    base_instruction=_SECURITY_BASE_SYSTEM_INSTRUCTION,
+    boundary_reminder=(
+        "Do not convert pure cost or observability concerns into security findings "
+        "unless they materially change exploitability or detection/response capability."
+    ),
+)
 
 
 class SecurityLLMReviewer(BaseReviewer):

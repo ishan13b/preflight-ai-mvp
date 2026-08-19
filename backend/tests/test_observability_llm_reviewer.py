@@ -7,6 +7,9 @@ from app.reviewers.observability_llm import ObservabilityLLMReviewer
 from app.schemas.review import (
     ArchitectureReviewRequest,
     BoardVote,
+    EvidenceBasis,
+    LLMReviewerFinding,
+    Severity,
     ObservabilityReviewerLLMResult,
 )
 from app.services.llm.provider import LLMProvider, LLMProviderError
@@ -36,9 +39,17 @@ class ObservabilityLLMReviewerTests(unittest.TestCase):
                 "Core service metrics exist, but trace correlation and model-call "
                 "visibility are incomplete across critical flows."
             ),
-            risks=["Cross-service root-cause analysis may be slow during incidents"],
+            findings=[
+                LLMReviewerFinding(
+                    statement="Cross-service root-cause analysis may be slow during incidents",
+                    evidence_basis=EvidenceBasis.INFERRED_RISK,
+                    severity_hint=Severity.MEDIUM,
+                )
+            ],
             recommendations=["Add distributed tracing with shared correlation IDs"],
             estimated_impact="Longer mean time to resolution during production failures.",
+            score_rationale="Diagnosis gaps remain despite baseline telemetry coverage.",
+            severity_rationale="Impact is meaningful but mitigated by existing metrics/logging.",
         )
 
         reviewer = ObservabilityLLMReviewer(provider, confidence=81)
@@ -65,9 +76,17 @@ class ObservabilityLLMReviewerTests(unittest.TestCase):
                 "Metrics, structured logs, tracing, and actionable alerts provide fast "
                 "detection and diagnosis."
             ),
-            risks=[],
+            findings=[
+                LLMReviewerFinding(
+                    statement="AI-specific retrieval telemetry coverage is not fully specified.",
+                    evidence_basis=EvidenceBasis.NOT_SPECIFIED,
+                    severity_hint=Severity.LOW,
+                )
+            ],
             recommendations=["Continuously tune alert quality and SLO coverage"],
             estimated_impact="Low near-term risk of blind spots during incidents.",
+            score_rationale="Core observability controls are strong with minor unspecified depth.",
+            severity_rationale="Unspecified telemetry depth appears low risk given compensating controls.",
         )
 
         category = ObservabilityLLMReviewer(provider).review(self.request)
@@ -81,9 +100,11 @@ class ObservabilityLLMReviewerTests(unittest.TestCase):
             "score": 11,
             "summary": "invalid",
             "engineering_reasoning": "invalid",
-            "risks": [],
+            "findings": [],
             "recommendations": [],
             "estimated_impact": "invalid",
+            "score_rationale": "invalid",
+            "severity_rationale": "invalid",
         }
 
         with self.assertRaises(ValidationError):
@@ -107,9 +128,17 @@ class ObservabilityLLMReviewerTests(unittest.TestCase):
                 "Baseline metrics exist, but logging and alert correlation are too weak "
                 "for fast diagnosis."
             ),
-            risks=["Noisy telemetry obscures high-priority production signals"],
+            findings=[
+                LLMReviewerFinding(
+                    statement="Noisy telemetry obscures high-priority production signals",
+                    evidence_basis=EvidenceBasis.OBSERVED,
+                    severity_hint=Severity.MEDIUM,
+                )
+            ],
             recommendations=["Define high-value alerts and normalize log fields"],
             estimated_impact="Slower incident triage and delayed remediation.",
+            score_rationale="Observed alert-noise problem slows diagnosis on critical paths.",
+            severity_rationale="Clear operational drag with moderate blast radius.",
         )
 
         ObservabilityLLMReviewer(provider).review(self.request)

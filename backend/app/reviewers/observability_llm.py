@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from app.reviewers.base import BaseReviewer
-from app.reviewers.llm_shared import run_llm_category_review
+from app.reviewers.llm_shared import build_calibrated_instruction, run_llm_category_review
 from app.schemas.review import (
     ArchitectureReviewRequest,
     CategoryReview,
@@ -11,7 +11,7 @@ from app.schemas.review import (
 )
 from app.services.llm.provider import LLMProvider
 
-_OBSERVABILITY_SYSTEM_INSTRUCTION = """
+_OBSERVABILITY_BASE_SYSTEM_INSTRUCTION = """
 You are the Observability reviewer for PreFlight AI's architecture Design Review Board.
 Evaluate ONLY observability and diagnosability characteristics of the submitted architecture.
 
@@ -41,6 +41,14 @@ Reason from the architecture as given; do not assume every system requires every
 Return only the structured fields requested by the response schema.
 Keep risks and recommendations concise and actionable.
 """.strip()
+
+_OBSERVABILITY_SYSTEM_INSTRUCTION = build_calibrated_instruction(
+    base_instruction=_OBSERVABILITY_BASE_SYSTEM_INSTRUCTION,
+    boundary_reminder=(
+        "Do not assign broad security or reliability risk unless the visibility gap "
+        "directly impairs detection, triage, or root-cause diagnosis."
+    ),
+)
 
 
 class ObservabilityLLMReviewer(BaseReviewer):

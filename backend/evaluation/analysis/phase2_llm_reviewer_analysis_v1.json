@@ -1,0 +1,649 @@
+{
+  "dataset_id": "preflight-phase2-llm-reviewer-reference-v1",
+  "evaluation_artifact": "/Users/ishanbansal/Desktop/AI Engineering Labs/backend/evaluation/output/llm_reviewer_evaluation_20260814T190859Z.json",
+  "adjudication_artifact": "/Users/ishanbansal/Desktop/AI Engineering Labs/backend/evaluation/adjudication/phase2_llm_reviewer_adjudication_v1.json",
+  "adjudication_version": "v1",
+  "analysis_version": "v1",
+  "record_count": 25,
+  "dimension_distributions": {
+    "finding_alignment": {
+      "STRONG": {
+        "count": 25,
+        "percentage": 100.0
+      },
+      "PARTIAL": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "WEAK": {
+        "count": 0,
+        "percentage": 0.0
+      }
+    },
+    "evidence_discipline": {
+      "GROUNDED": {
+        "count": 9,
+        "percentage": 36.0
+      },
+      "MIXED": {
+        "count": 16,
+        "percentage": 64.0
+      },
+      "UNSUPPORTED": {
+        "count": 0,
+        "percentage": 0.0
+      }
+    },
+    "category_relevance": {
+      "FOCUSED": {
+        "count": 19,
+        "percentage": 76.0
+      },
+      "SOME_LEAKAGE": {
+        "count": 6,
+        "percentage": 24.0
+      },
+      "SIGNIFICANT_LEAKAGE": {
+        "count": 0,
+        "percentage": 0.0
+      }
+    },
+    "severity_calibration": {
+      "CALIBRATED": {
+        "count": 1,
+        "percentage": 4.0
+      },
+      "ONE_LEVEL_OFF": {
+        "count": 18,
+        "percentage": 72.0
+      },
+      "MATERIALLY_MISALIGNED": {
+        "count": 6,
+        "percentage": 24.0
+      }
+    },
+    "engineering_usefulness": {
+      "HIGH": {
+        "count": 23,
+        "percentage": 92.0
+      },
+      "MEDIUM": {
+        "count": 2,
+        "percentage": 8.0
+      },
+      "LOW": {
+        "count": 0,
+        "percentage": 0.0
+      }
+    },
+    "overall_judgment": {
+      "STRONG": {
+        "count": 19,
+        "percentage": 76.0
+      },
+      "MIXED": {
+        "count": 6,
+        "percentage": 24.0
+      },
+      "WEAK": {
+        "count": 0,
+        "percentage": 0.0
+      }
+    }
+  },
+  "cross_tabs": {
+    "overall_judgment_by_category": {
+      "Security": {
+        "total": 5,
+        "distribution": {
+          "STRONG": {
+            "count": 5,
+            "percentage": 100.0
+          },
+          "MIXED": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "WEAK": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Scalability": {
+        "total": 5,
+        "distribution": {
+          "STRONG": {
+            "count": 4,
+            "percentage": 80.0
+          },
+          "MIXED": {
+            "count": 1,
+            "percentage": 20.0
+          },
+          "WEAK": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Reliability": {
+        "total": 5,
+        "distribution": {
+          "STRONG": {
+            "count": 5,
+            "percentage": 100.0
+          },
+          "MIXED": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "WEAK": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Observability": {
+        "total": 5,
+        "distribution": {
+          "STRONG": {
+            "count": 2,
+            "percentage": 40.0
+          },
+          "MIXED": {
+            "count": 3,
+            "percentage": 60.0
+          },
+          "WEAK": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Cost": {
+        "total": 5,
+        "distribution": {
+          "STRONG": {
+            "count": 3,
+            "percentage": 60.0
+          },
+          "MIXED": {
+            "count": 2,
+            "percentage": 40.0
+          },
+          "WEAK": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      }
+    },
+    "severity_calibration_by_category": {
+      "Security": {
+        "total": 5,
+        "distribution": {
+          "CALIBRATED": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "ONE_LEVEL_OFF": {
+            "count": 5,
+            "percentage": 100.0
+          },
+          "MATERIALLY_MISALIGNED": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Scalability": {
+        "total": 5,
+        "distribution": {
+          "CALIBRATED": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "ONE_LEVEL_OFF": {
+            "count": 4,
+            "percentage": 80.0
+          },
+          "MATERIALLY_MISALIGNED": {
+            "count": 1,
+            "percentage": 20.0
+          }
+        }
+      },
+      "Reliability": {
+        "total": 5,
+        "distribution": {
+          "CALIBRATED": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "ONE_LEVEL_OFF": {
+            "count": 5,
+            "percentage": 100.0
+          },
+          "MATERIALLY_MISALIGNED": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Observability": {
+        "total": 5,
+        "distribution": {
+          "CALIBRATED": {
+            "count": 1,
+            "percentage": 20.0
+          },
+          "ONE_LEVEL_OFF": {
+            "count": 1,
+            "percentage": 20.0
+          },
+          "MATERIALLY_MISALIGNED": {
+            "count": 3,
+            "percentage": 60.0
+          }
+        }
+      },
+      "Cost": {
+        "total": 5,
+        "distribution": {
+          "CALIBRATED": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "ONE_LEVEL_OFF": {
+            "count": 3,
+            "percentage": 60.0
+          },
+          "MATERIALLY_MISALIGNED": {
+            "count": 2,
+            "percentage": 40.0
+          }
+        }
+      }
+    },
+    "evidence_discipline_by_category": {
+      "Security": {
+        "total": 5,
+        "distribution": {
+          "GROUNDED": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "MIXED": {
+            "count": 5,
+            "percentage": 100.0
+          },
+          "UNSUPPORTED": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Scalability": {
+        "total": 5,
+        "distribution": {
+          "GROUNDED": {
+            "count": 2,
+            "percentage": 40.0
+          },
+          "MIXED": {
+            "count": 3,
+            "percentage": 60.0
+          },
+          "UNSUPPORTED": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Reliability": {
+        "total": 5,
+        "distribution": {
+          "GROUNDED": {
+            "count": 1,
+            "percentage": 20.0
+          },
+          "MIXED": {
+            "count": 4,
+            "percentage": 80.0
+          },
+          "UNSUPPORTED": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Observability": {
+        "total": 5,
+        "distribution": {
+          "GROUNDED": {
+            "count": 4,
+            "percentage": 80.0
+          },
+          "MIXED": {
+            "count": 1,
+            "percentage": 20.0
+          },
+          "UNSUPPORTED": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Cost": {
+        "total": 5,
+        "distribution": {
+          "GROUNDED": {
+            "count": 2,
+            "percentage": 40.0
+          },
+          "MIXED": {
+            "count": 3,
+            "percentage": 60.0
+          },
+          "UNSUPPORTED": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      }
+    },
+    "engineering_usefulness_by_category": {
+      "Security": {
+        "total": 5,
+        "distribution": {
+          "HIGH": {
+            "count": 5,
+            "percentage": 100.0
+          },
+          "MEDIUM": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "LOW": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Scalability": {
+        "total": 5,
+        "distribution": {
+          "HIGH": {
+            "count": 5,
+            "percentage": 100.0
+          },
+          "MEDIUM": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "LOW": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Reliability": {
+        "total": 5,
+        "distribution": {
+          "HIGH": {
+            "count": 5,
+            "percentage": 100.0
+          },
+          "MEDIUM": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "LOW": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Observability": {
+        "total": 5,
+        "distribution": {
+          "HIGH": {
+            "count": 5,
+            "percentage": 100.0
+          },
+          "MEDIUM": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "LOW": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Cost": {
+        "total": 5,
+        "distribution": {
+          "HIGH": {
+            "count": 3,
+            "percentage": 60.0
+          },
+          "MEDIUM": {
+            "count": 2,
+            "percentage": 40.0
+          },
+          "LOW": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      }
+    },
+    "overall_judgment_by_scenario": {
+      "Customer Support RAG": {
+        "total": 5,
+        "distribution": {
+          "STRONG": {
+            "count": 3,
+            "percentage": 60.0
+          },
+          "MIXED": {
+            "count": 2,
+            "percentage": 40.0
+          },
+          "WEAK": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "AI Coding Assistant": {
+        "total": 5,
+        "distribution": {
+          "STRONG": {
+            "count": 4,
+            "percentage": 80.0
+          },
+          "MIXED": {
+            "count": 1,
+            "percentage": 20.0
+          },
+          "WEAK": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Financial Copilot": {
+        "total": 5,
+        "distribution": {
+          "STRONG": {
+            "count": 4,
+            "percentage": 80.0
+          },
+          "MIXED": {
+            "count": 1,
+            "percentage": 20.0
+          },
+          "WEAK": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Enterprise Search": {
+        "total": 5,
+        "distribution": {
+          "STRONG": {
+            "count": 3,
+            "percentage": 60.0
+          },
+          "MIXED": {
+            "count": 2,
+            "percentage": 40.0
+          },
+          "WEAK": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      },
+      "Multi-Agent Research System": {
+        "total": 5,
+        "distribution": {
+          "STRONG": {
+            "count": 5,
+            "percentage": 100.0
+          },
+          "MIXED": {
+            "count": 0,
+            "percentage": 0.0
+          },
+          "WEAK": {
+            "count": 0,
+            "percentage": 0.0
+          }
+        }
+      }
+    }
+  },
+  "descriptive_statistics": {
+    "average_deterministic_score": 8.68,
+    "average_llm_score": 5.48,
+    "average_score_difference_llm_minus_deterministic": -3.2,
+    "deterministic_vote_distribution": {
+      "APPROVED": {
+        "count": 16,
+        "percentage": 64.0
+      },
+      "APPROVED WITH CONCERNS": {
+        "count": 5,
+        "percentage": 20.0
+      },
+      "REQUIRES CHANGES": {
+        "count": 4,
+        "percentage": 16.0
+      }
+    },
+    "llm_vote_distribution": {
+      "APPROVED": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "APPROVED WITH CONCERNS": {
+        "count": 7,
+        "percentage": 28.0
+      },
+      "REQUIRES CHANGES": {
+        "count": 18,
+        "percentage": 72.0
+      }
+    },
+    "reference_severity_distribution": {
+      "LOW": {
+        "count": 1,
+        "percentage": 4.0
+      },
+      "MEDIUM": {
+        "count": 9,
+        "percentage": 36.0
+      },
+      "HIGH": {
+        "count": 12,
+        "percentage": 48.0
+      },
+      "CRITICAL": {
+        "count": 3,
+        "percentage": 12.0
+      }
+    },
+    "deterministic_severity_distribution": {
+      "LOW": {
+        "count": 12,
+        "percentage": 48.0
+      },
+      "MEDIUM": {
+        "count": 4,
+        "percentage": 16.0
+      },
+      "HIGH": {
+        "count": 9,
+        "percentage": 36.0
+      },
+      "CRITICAL": {
+        "count": 0,
+        "percentage": 0.0
+      }
+    },
+    "llm_severity_distribution": {
+      "LOW": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "MEDIUM": {
+        "count": 0,
+        "percentage": 0.0
+      },
+      "HIGH": {
+        "count": 21,
+        "percentage": 84.0
+      },
+      "CRITICAL": {
+        "count": 4,
+        "percentage": 16.0
+      }
+    }
+  },
+  "observations": {
+    "strongest_dimensions": [
+      "finding_alignment (100% STRONG)",
+      "engineering_usefulness (88% HIGH)"
+    ],
+    "weakest_dimensions": [
+      "severity_calibration (16% MATERIALLY_MISALIGNED; 80% ONE_LEVEL_OFF)",
+      "evidence_discipline (60% MIXED)",
+      "category_relevance (24% SOME_LEAKAGE)"
+    ],
+    "categories_where_llm_appears_strongest": [
+      "Security, Scalability, Reliability, and Multi-Agent Observability show consistently STRONG overall judgments."
+    ],
+    "categories_with_most_calibration_or_leakage_risk": [
+      "Observability (40% MATERIALLY_MISALIGNED, 40% SOME_LEAKAGE)",
+      "Cost (40% MATERIALLY_MISALIGNED, 60% SOME_LEAKAGE, 40% MEDIUM usefulness)"
+    ],
+    "notable_scenario_level_patterns": [
+      "Customer Support RAG and Enterprise Search each include 2 MIXED overall judgments out of 5.",
+      "AI Coding Assistant and Financial Copilot each include 1 MIXED overall judgment out of 5.",
+      "Multi-Agent Research System is uniformly STRONG across all 5 categories."
+    ],
+    "strongest_examples": [
+      "Multi-Agent Research System / Observability (CALIBRATED, GROUNDED, FOCUSED, HIGH usefulness, STRONG overall)."
+    ],
+    "weakest_examples": [
+      "Customer Support RAG / Scalability (MATERIALLY_MISALIGNED severity, MIXED overall).",
+      "Enterprise Search / Cost (MATERIALLY_MISALIGNED severity, SOME_LEAKAGE, MEDIUM usefulness, MIXED overall)."
+    ],
+    "score_difference_note": "LLM average score is lower than deterministic average score; this is descriptive only and not interpreted as accuracy."
+  }
+}

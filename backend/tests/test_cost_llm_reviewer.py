@@ -8,6 +8,9 @@ from app.schemas.review import (
     ArchitectureReviewRequest,
     BoardVote,
     CostReviewerLLMResult,
+    EvidenceBasis,
+    LLMReviewerFinding,
+    Severity,
 )
 from app.services.llm.provider import LLMProvider, LLMProviderError
 
@@ -36,9 +39,17 @@ class CostLLMReviewerTests(unittest.TestCase):
                 "Inference and retrieval are primary cost drivers, but caching and "
                 "batching can reduce repeated expensive work."
             ),
-            risks=["High-volume model calls may dominate monthly spend"],
+            findings=[
+                LLMReviewerFinding(
+                    statement="High-volume model calls may dominate monthly spend",
+                    evidence_basis=EvidenceBasis.INFERRED_RISK,
+                    severity_hint=Severity.MEDIUM,
+                )
+            ],
             recommendations=["Apply cache-first retrieval for repeated query patterns"],
             estimated_impact="Cloud spend may rise faster than traffic without controls.",
+            score_rationale="Main cost driver is clear with available optimization levers.",
+            severity_rationale="Cost risk is credible but partially mitigated by caching options.",
         )
 
         reviewer = CostLLMReviewer(provider, confidence=80)
@@ -65,9 +76,17 @@ class CostLLMReviewerTests(unittest.TestCase):
                 "Major spend drivers are understood, with practical controls for "
                 "token usage and scaling efficiency."
             ),
-            risks=[],
+            findings=[
+                LLMReviewerFinding(
+                    statement="Budget guardrail thresholds are not fully specified.",
+                    evidence_basis=EvidenceBasis.NOT_SPECIFIED,
+                    severity_hint=Severity.LOW,
+                )
+            ],
             recommendations=["Keep usage budgets and alerts calibrated"],
             estimated_impact="Low near-term risk of unexpected cost escalation.",
+            score_rationale="Most core controls exist with minor governance ambiguity.",
+            severity_rationale="Unspecified thresholds are low-risk given existing controls.",
         )
 
         category = CostLLMReviewer(provider).review(self.request)
@@ -81,9 +100,11 @@ class CostLLMReviewerTests(unittest.TestCase):
             "score": 11,
             "summary": "invalid",
             "engineering_reasoning": "invalid",
-            "risks": [],
+            "findings": [],
             "recommendations": [],
             "estimated_impact": "invalid",
+            "score_rationale": "invalid",
+            "severity_rationale": "invalid",
         }
 
         with self.assertRaises(ValidationError):
@@ -107,9 +128,17 @@ class CostLLMReviewerTests(unittest.TestCase):
                 "Cost telemetry is partial, and model call volume can increase quickly "
                 "with traffic without stronger controls."
             ),
-            risks=["Runaway spend risk under sudden traffic increases"],
+            findings=[
+                LLMReviewerFinding(
+                    statement="Runaway spend risk under sudden traffic increases",
+                    evidence_basis=EvidenceBasis.INFERRED_RISK,
+                    severity_hint=Severity.HIGH,
+                )
+            ],
             recommendations=["Add budget guardrails and per-request cost tracking"],
             estimated_impact="Higher-than-expected monthly spend and margin pressure.",
+            score_rationale="Traffic growth and model fan-out can amplify spend quickly.",
+            severity_rationale="High severity requires explicit growth-triggered blast radius.",
         )
 
         CostLLMReviewer(provider).review(self.request)

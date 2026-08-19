@@ -1,0 +1,1367 @@
+{
+  "dataset_id": "preflight-phase2-llm-reviewer-reference-v1",
+  "evaluation_artifact": "/Users/ishanbansal/Desktop/AI Engineering Labs/backend/evaluation/output/llm_reviewer_evaluation_phase2_2_20260819_controlled_run2.json",
+  "adjudication_version": "v1-partial-phase2_2",
+  "adjudication_scope": {
+    "total_records": 25,
+    "adjudicated_records": 19,
+    "non_adjudicable_validation_failures": 6,
+    "methodology_note": "Frozen Phase 2.0/2.1 rubric applied only to successful records. Official phase-level percentages require complete 25-record adjudication set."
+  },
+  "evaluation_dimensions": {
+    "finding_alignment": [
+      "STRONG",
+      "PARTIAL",
+      "WEAK"
+    ],
+    "evidence_discipline": [
+      "GROUNDED",
+      "MIXED",
+      "UNSUPPORTED"
+    ],
+    "category_relevance": [
+      "FOCUSED",
+      "SOME_LEAKAGE",
+      "SIGNIFICANT_LEAKAGE"
+    ],
+    "severity_calibration": [
+      "CALIBRATED",
+      "ONE_LEVEL_OFF",
+      "MATERIALLY_MISALIGNED"
+    ],
+    "engineering_usefulness": [
+      "HIGH",
+      "MEDIUM",
+      "LOW"
+    ],
+    "overall_judgment": [
+      "STRONG",
+      "MIXED",
+      "WEAK"
+    ]
+  },
+  "partial_aggregate_counts_over_19_adjudicated_records": {
+    "finding_alignment": {
+      "STRONG": 19
+    },
+    "evidence_discipline": {
+      "MIXED": 12,
+      "GROUNDED": 7
+    },
+    "category_relevance": {
+      "FOCUSED": 12,
+      "SOME_LEAKAGE": 7
+    },
+    "severity_calibration": {
+      "ONE_LEVEL_OFF": 6,
+      "CALIBRATED": 13
+    },
+    "engineering_usefulness": {
+      "HIGH": 18,
+      "MEDIUM": 1
+    },
+    "overall_judgment": {
+      "STRONG": 18,
+      "MIXED": 1
+    }
+  },
+  "records": [
+    {
+      "scenario_id": "customer-support-rag",
+      "scenario_name": "Customer Support RAG",
+      "category": "Security",
+      "reference_severity": "MEDIUM",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "LOW",
+      "llm_score": 7,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "ONE_LEVEL_OFF",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Strong security framing and actionable controls; severity remains slightly aggressive for unspecified gaps.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK",
+        "NOT_SPECIFIED"
+      ],
+      "llm_severity_hint": [
+        "LOW",
+        "MEDIUM",
+        "MEDIUM",
+        "HIGH",
+        "MEDIUM",
+        "HIGH",
+        "MEDIUM"
+      ],
+      "llm_confidence": [
+        90,
+        80,
+        75,
+        70,
+        80,
+        70,
+        75
+      ],
+      "llm_category_relevance_note": [
+        "Authentication",
+        "Authorization",
+        "Endpoint Security",
+        "Endpoint Security",
+        "Secrets Management",
+        "Secrets Management",
+        "Monitoring / Incident Response"
+      ],
+      "llm_score_rationale": "A score of 7 reflects the presence of standard authentication and monitoring but highlights meaningful concerns due to missing details on authorization, endpoint abuse protections, and secrets handling.",
+      "llm_severity_rationale": "The severity is calibrated to medium/high for risk areas with missing controls and inferred risks, balanced by the presence of authentication and monitoring, but requires improvements for production readiness."
+    },
+    {
+      "scenario_id": "customer-support-rag",
+      "scenario_name": "Customer Support RAG",
+      "category": "Scalability",
+      "reference_severity": "LOW",
+      "llm_severity": null,
+      "deterministic_severity": "LOW",
+      "llm_score": null,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "FAILED",
+      "adjudication_status": "NON_ADJUDICABLE_VALIDATION_FAILURE",
+      "finding_alignment": null,
+      "evidence_discipline": null,
+      "category_relevance": null,
+      "severity_calibration": null,
+      "engineering_usefulness": null,
+      "overall_judgment": null,
+      "notes": "Scalability LLM review failed: OpenAI structured generation failed.",
+      "llm_evidence_basis": null,
+      "llm_severity_hint": null,
+      "llm_confidence": null,
+      "llm_category_relevance_note": null,
+      "llm_score_rationale": null,
+      "llm_severity_rationale": null,
+      "failure_diagnostics": {
+        "exception_class": "ValidationError",
+        "exception_module": "pydantic_core._pydantic_core",
+        "message": "1 validation error for ScalabilityReviewerLLMResult\nfindings.2\n  Value error, NOT_SPECIFIED finding statements must not combine uncertainty with inferred impact; use separate INFERRED_RISK finding. [type=value_error, input_value={'statement': 'The archit... AI system throughput.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+        "validation_errors": [
+          {
+            "loc": [
+              "findings",
+              "2"
+            ],
+            "type": "value_error",
+            "msg": "Value error, NOT_SPECIFIED finding statements must not combine uncertainty with inferred impact; use separate INFERRED_RISK finding.",
+            "input": {
+              "statement": "The architecture does not specify the scale-out strategy or concurrency model of GPT-5.5 inference, creating uncertainty about handling increased load on model inference.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "severity_hint": "MEDIUM",
+              "confidence": 85,
+              "category_relevance_note": "Model inference scaling is critical for AI system throughput."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "customer-support-rag",
+      "scenario_name": "Customer Support RAG",
+      "category": "Reliability",
+      "reference_severity": "MEDIUM",
+      "llm_severity": null,
+      "deterministic_severity": "MEDIUM",
+      "llm_score": null,
+      "deterministic_score": 9,
+      "reviewer": "human",
+      "llm_status": "FAILED",
+      "adjudication_status": "NON_ADJUDICABLE_VALIDATION_FAILURE",
+      "finding_alignment": null,
+      "evidence_discipline": null,
+      "category_relevance": null,
+      "severity_calibration": null,
+      "engineering_usefulness": null,
+      "overall_judgment": null,
+      "notes": "Reliability LLM review failed: OpenAI structured generation failed.",
+      "llm_evidence_basis": null,
+      "llm_severity_hint": null,
+      "llm_confidence": null,
+      "llm_category_relevance_note": null,
+      "llm_score_rationale": null,
+      "llm_severity_rationale": null,
+      "failure_diagnostics": {
+        "exception_class": "ValidationError",
+        "exception_module": "pydantic_core._pydantic_core",
+        "message": "1 validation error for ReliabilityReviewerLLMResult\nfindings.4\n  Value error, NOT_SPECIFIED finding statements must not assert proven absence. [type=value_error, input_value={'statement': 'Monitoring...reliability incidents.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+        "validation_errors": [
+          {
+            "loc": [
+              "findings",
+              "4"
+            ],
+            "type": "value_error",
+            "msg": "Value error, NOT_SPECIFIED finding statements must not assert proven absence.",
+            "input": {
+              "statement": "Monitoring via Langfuse is specified but lacks detail on alerts, incident response, and automated recovery capabilities.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "severity_hint": "MEDIUM",
+              "confidence": 70,
+              "category_relevance_note": "Monitoring effectiveness impacts detection and resolution of reliability incidents."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "customer-support-rag",
+      "scenario_name": "Customer Support RAG",
+      "category": "Observability",
+      "reference_severity": "MEDIUM",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "LOW",
+      "llm_score": 7,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "GROUNDED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "ONE_LEVEL_OFF",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Clear observability gap identification with practical recommendations and good category focus.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "LOW",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM"
+      ],
+      "llm_confidence": [
+        90,
+        80,
+        80,
+        80,
+        75
+      ],
+      "llm_category_relevance_note": [
+        "This provides useful signals for AI-related incident detection and diagnosis.",
+        "Structured logs are important for contextual diagnostics and incident triage.",
+        "Tracing aids in diagnosing latency and error propagation in complex distributed systems.",
+        "Effective alerting is needed for rapid incident detection and response.",
+        "Retrieval diagnostics are key to RAG system observability."
+      ],
+      "llm_score_rationale": "A score of 7 reflects the presence of Langfuse monitoring which is valuable for AI observability, balanced against missing explicit details on other critical observability practices like structured logging, distributed tracing, and alerting, which are necessary for full production-grade incident diagnosis.",
+      "llm_severity_rationale": "Severity hints are mostly medium for unspecified telemetry gaps given the moderate development risk and operational impact. The inferred risk on retrieval monitoring is also medium due to the relevance to system behavior. No critical severity is assigned due to the partial observability coverage observed."
+    },
+    {
+      "scenario_id": "customer-support-rag",
+      "scenario_name": "Customer Support RAG",
+      "category": "Cost",
+      "reference_severity": "MEDIUM",
+      "llm_severity": null,
+      "deterministic_severity": "LOW",
+      "llm_score": null,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "FAILED",
+      "adjudication_status": "NON_ADJUDICABLE_VALIDATION_FAILURE",
+      "finding_alignment": null,
+      "evidence_discipline": null,
+      "category_relevance": null,
+      "severity_calibration": null,
+      "engineering_usefulness": null,
+      "overall_judgment": null,
+      "notes": "Cost LLM review failed: OpenAI structured generation failed.",
+      "llm_evidence_basis": null,
+      "llm_severity_hint": null,
+      "llm_confidence": null,
+      "llm_category_relevance_note": null,
+      "llm_score_rationale": null,
+      "llm_severity_rationale": null,
+      "failure_diagnostics": {
+        "exception_class": "ValidationError",
+        "exception_module": "pydantic_core._pydantic_core",
+        "message": "2 validation errors for CostReviewerLLMResult\nfindings.1\n  Value error, NOT_SPECIFIED finding statements must not combine uncertainty with inferred impact; use separate INFERRED_RISK finding. [type=value_error, input_value={'statement': 'The archit...as traffic fluctuates.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error\nfindings.4\n  Value error, NOT_SPECIFIED finding statements must not assert proven absence. [type=value_error, input_value={'statement': 'The archit...orage and query costs.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+        "validation_errors": [
+          {
+            "loc": [
+              "findings",
+              "1"
+            ],
+            "type": "value_error",
+            "msg": "Value error, NOT_SPECIFIED finding statements must not combine uncertainty with inferred impact; use separate INFERRED_RISK finding.",
+            "input": {
+              "statement": "The architecture does not specify autoscaling strategies or idle-resource management for backend or vector DB, creating uncertainty about compute cost efficiency at varying load.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "severity_hint": "MEDIUM",
+              "confidence": 80,
+              "category_relevance_note": "Autoscaling efficiency impacts cloud compute costs as traffic fluctuates."
+            }
+          },
+          {
+            "loc": [
+              "findings",
+              "4"
+            ],
+            "type": "value_error",
+            "msg": "Value error, NOT_SPECIFIED finding statements must not assert proven absence.",
+            "input": {
+              "statement": "The architecture lacks detail on vector DB query patterns, result caching, and data retention, leaving costs from Pinecone usage unclear and potentially high with more complex queries or large datasets.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "severity_hint": "MEDIUM",
+              "confidence": 70,
+              "category_relevance_note": "Vector DB query volume and retention policies directly affect storage and query costs."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "ai-coding-assistant",
+      "scenario_name": "AI Coding Assistant",
+      "category": "Security",
+      "reference_severity": "MEDIUM",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "LOW",
+      "llm_score": 5,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "ONE_LEVEL_OFF",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Security controls are relevant and actionable, though several points remain inference-heavy from unspecified architecture detail.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED"
+      ],
+      "llm_severity_hint": [
+        "LOW",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM"
+      ],
+      "llm_confidence": [
+        90,
+        80,
+        80,
+        75,
+        85
+      ],
+      "llm_category_relevance_note": [
+        "This provides a baseline identity control but lacks detail on token lifecycle and refresh security.",
+        "Absence of authorization details could lead to improper access control.",
+        "Risk of AI endpoint exposure or denial of service if protections are absent.",
+        "This increases risk of secret leakage or misuse.",
+        "Detection and response to security incidents might be impaired without monitoring."
+      ],
+      "llm_score_rationale": "JWT use is positive but the lack of authorization, endpoint abuse protections, secrets management, and monitoring leads to medium severity gaps, meriting a score in the mid-range (5).",
+      "llm_severity_rationale": "The unspecified controls represent meaningful risks with moderate likelihood and potentially large blast radius in production, warranting medium severity findings across key categories."
+    },
+    {
+      "scenario_id": "ai-coding-assistant",
+      "scenario_name": "AI Coding Assistant",
+      "category": "Scalability",
+      "reference_severity": "MEDIUM",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "LOW",
+      "llm_score": 6,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "SOME_LEAKAGE",
+      "severity_calibration": "ONE_LEVEL_OFF",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Scalability concerns are useful but include observability-related framing that introduces mild category leakage.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "LOW",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "llm_confidence": [
+        90,
+        80,
+        85,
+        80,
+        70
+      ],
+      "llm_category_relevance_note": [
+        "Cache scalability benefits throughput and latency.",
+        "Vector DB performance impacts inference and retrieval scalability.",
+        "Monitoring is critical to manage scalability and detect saturation.",
+        "Scaling strategies guide resiliency under higher load.",
+        "Unmanaged resource saturation risks throughput and latency."
+      ],
+      "llm_score_rationale": "Score of 6 reflects generally scalable components and use of caching, but significant gaps remain due to the use of PostgreSQL as vector DB, absence of monitoring, and lack of explicit scaling strategies, which limit confidence in scalability beyond moderate load.",
+      "llm_severity_rationale": "Severity is medium to high due to potential bottlenecks in vector DB and lack of monitoring; these factors increase risk of performance degradation at scale but can be mitigated with proper controls."
+    },
+    {
+      "scenario_id": "ai-coding-assistant",
+      "scenario_name": "AI Coding Assistant",
+      "category": "Reliability",
+      "reference_severity": "HIGH",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "HIGH",
+      "llm_score": 5,
+      "deterministic_score": 6,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Reliability risks are well aligned and operationally useful, with severity generally matching reference expectations.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "HIGH",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "llm_confidence": [
+        90,
+        85,
+        80,
+        75,
+        80,
+        80
+      ],
+      "llm_category_relevance_note": [
+        "Monitoring is crucial for detecting failures and enabling timely recovery.",
+        "Reliability relies heavily on these controls in distributed systems with external calls.",
+        "Cache failures can affect performance and user experience.",
+        "Data store outages would impact service availability and consistency.",
+        "Such controls help contain blast radius and improve stability under load.",
+        "External AI provider failures affect user request reliability."
+      ],
+      "llm_score_rationale": "The architecture covers key functional components but misses important operational resilience practices and failure mitigations necessary for reliable production service. The lack of monitoring, failover, and retry/fallback mechanisms especially for critical dependencies drives the score to the mid-range with significant improvement needed.",
+      "llm_severity_rationale": "Several findings reflect moderate to high severity due to their potential impact on availability and user experience, particularly the unspecified database HA and external LLM dependency failure handling. The absence of monitoring elongates failure detection and resolution time, increasing risk exposure."
+    },
+    {
+      "scenario_id": "ai-coding-assistant",
+      "scenario_name": "AI Coding Assistant",
+      "category": "Observability",
+      "reference_severity": "HIGH",
+      "llm_severity": "CRITICAL",
+      "deterministic_severity": "HIGH",
+      "llm_score": 3,
+      "deterministic_score": 7,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "GROUNDED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "ONE_LEVEL_OFF",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Strong observability diagnosis and recommendations; severity is slightly elevated versus reference.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "CRITICAL",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "CRITICAL"
+      ],
+      "llm_confidence": [
+        95,
+        80,
+        75,
+        75,
+        90
+      ],
+      "llm_category_relevance_note": [
+        "Directly impacts incident detection and diagnosis capabilities.",
+        "Logging is critical for post-incident analysis and debugging.",
+        "Tracing aids in diagnosing cross-service latency and failures.",
+        "Visibility into AI inference and data retrieval latency/failure is important for operational health.",
+        "Absence of observability directly impairs operational response."
+      ],
+      "llm_score_rationale": "No monitoring or observability features are included, representing a critical visibility gap. This lack profoundly limits operational awareness and diagnostic capabilities, justifying a low score of 3.",
+      "llm_severity_rationale": "The absence of monitoring and logging infrastructure creates a severe operational risk, posing a critical severity due to likelihood of undetected issues and high blast radius with 2500 TPS traffic and AI service dependency."
+    },
+    {
+      "scenario_id": "ai-coding-assistant",
+      "scenario_name": "AI Coding Assistant",
+      "category": "Cost",
+      "reference_severity": "MEDIUM",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "LOW",
+      "llm_score": 6,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "SOME_LEAKAGE",
+      "severity_calibration": "ONE_LEVEL_OFF",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Cost guidance is practical but includes some adjacent-category emphasis around monitoring/scaling.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "OBSERVED",
+        "OBSERVED",
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "MEDIUM",
+        "LOW",
+        "LOW",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "llm_confidence": [
+        90,
+        80,
+        95,
+        85,
+        75,
+        80,
+        70
+      ],
+      "llm_category_relevance_note": [
+        "Without monitoring, runaway costs may occur unnoticed.",
+        "Could be cost-effective but may cause inefficient queries at scale.",
+        "Positive for cost efficiency in reducing downstream DB or model calls.",
+        "Lack of traffic pattern details complicates cost scaling assessment.",
+        "Important for managing costs under variable traffic.",
+        "Token usage directly impacts cost of LLM API calls.",
+        "Cost risk tied to traffic growth and lack of cost controls."
+      ],
+      "llm_score_rationale": "The architecture includes foundational cost-saving elements like caching and standard backend but lacks critical details on cost monitoring, autoscaling, and token optimization. These omissions present significant cost risks that temper the otherwise reasonable cost profile to a mid-level score.",
+      "llm_severity_rationale": "Medium severity is assigned because missing cost controls increase the risk of inefficient spending which could materially impact budgeting, but the presence of caching and a conventional tech stack help mitigate worst-case scenarios. The inferred risk of cost overruns from absent autoscaling raises severity toward the higher medium range."
+    },
+    {
+      "scenario_id": "financial-copilot",
+      "scenario_name": "Financial Copilot",
+      "category": "Security",
+      "reference_severity": "HIGH",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "LOW",
+      "llm_score": 7,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Security analysis is strong and well-targeted; separation of unspecified controls and inferred risk is clear.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK",
+        "NOT_SPECIFIED"
+      ],
+      "llm_severity_hint": [
+        "LOW",
+        "MEDIUM",
+        "MEDIUM",
+        "HIGH",
+        "MEDIUM",
+        "HIGH",
+        "LOW"
+      ],
+      "llm_confidence": [
+        90,
+        80,
+        75,
+        70,
+        80,
+        70,
+        75
+      ],
+      "llm_category_relevance_note": [
+        "Foundation for authentication posture.",
+        "Authorization controls are critical for enforcing resource-level access.",
+        "AI endpoint abuse risk directly impacts availability and security.",
+        "Risk of abuse on AI services affects system stability and security.",
+        "Secret management is important to prevent credential leakage.",
+        "Credential compromise would have serious security impacts.",
+        "Security monitoring readiness requires detail for effective response."
+      ],
+      "llm_score_rationale": "JWT authentication and AWS monitoring provide foundational controls, but lack of explicit authorization, AI endpoint protections, and secret handling details limit stronger confidence, meriting a score of 7.",
+      "llm_severity_rationale": "Medium to high severity risks arise from unspecified critical controls, especially around AI endpoint protection and secrets, which justify attention but do not yet constitute critical blockers."
+    },
+    {
+      "scenario_id": "financial-copilot",
+      "scenario_name": "Financial Copilot",
+      "category": "Scalability",
+      "reference_severity": "HIGH",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "HIGH",
+      "llm_score": 6,
+      "deterministic_score": 8,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "GROUNDED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Scalability concerns are category-appropriate, grounded, and aligned with expected severity.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "llm_confidence": [
+        90,
+        80,
+        80,
+        70
+      ],
+      "llm_category_relevance_note": [
+        "Caching is vital for improving throughput and reducing load on vector search and model inference components.",
+        "Effective concurrency and load distribution are crucial for horizontal scalability and maintaining latency under load.",
+        "Model inference capacity is a key scalability factor especially for LLM-integrated applications.",
+        "Potential bottlenecks at backend or LLM inference could cause request queuing or failures under load spikes."
+      ],
+      "llm_score_rationale": "Score of 6 reflects generally scalable components supplemented by critical gaps such as no caching and unspecified concurrency handling, which limit confidence in higher load resilience.",
+      "llm_severity_rationale": "Medium severity findings predominate from observed missing caching and unspecified concurrency controls; high risk inferred from potential saturation under load justifies overall caution in scalability assessment."
+    },
+    {
+      "scenario_id": "financial-copilot",
+      "scenario_name": "Financial Copilot",
+      "category": "Reliability",
+      "reference_severity": "MEDIUM",
+      "llm_severity": null,
+      "deterministic_severity": "MEDIUM",
+      "llm_score": null,
+      "deterministic_score": 9,
+      "reviewer": "human",
+      "llm_status": "FAILED",
+      "adjudication_status": "NON_ADJUDICABLE_VALIDATION_FAILURE",
+      "finding_alignment": null,
+      "evidence_discipline": null,
+      "category_relevance": null,
+      "severity_calibration": null,
+      "engineering_usefulness": null,
+      "overall_judgment": null,
+      "notes": "Reliability LLM review failed: OpenAI structured generation failed.",
+      "llm_evidence_basis": null,
+      "llm_severity_hint": null,
+      "llm_confidence": null,
+      "llm_category_relevance_note": null,
+      "llm_score_rationale": null,
+      "llm_severity_rationale": null,
+      "failure_diagnostics": {
+        "exception_class": "ValidationError",
+        "exception_module": "pydantic_core._pydantic_core",
+        "message": "1 validation error for ReliabilityReviewerLLMResult\nfindings.2\n  Value error, NOT_SPECIFIED finding statements must not assert proven absence. [type=value_error, input_value={'statement': 'There is n...under partial outages.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+        "validation_errors": [
+          {
+            "loc": [
+              "findings",
+              "2"
+            ],
+            "type": "value_error",
+            "msg": "Value error, NOT_SPECIFIED finding statements must not assert proven absence.",
+            "input": {
+              "statement": "There is no specified fallback or graceful degradation strategy to maintain partial service availability during component failures.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "severity_hint": "MEDIUM",
+              "confidence": 75,
+              "category_relevance_note": "Graceful degradation can limit blast radius of failures and improve user experience under partial outages."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "financial-copilot",
+      "scenario_name": "Financial Copilot",
+      "category": "Observability",
+      "reference_severity": "MEDIUM",
+      "llm_severity": null,
+      "deterministic_severity": "LOW",
+      "llm_score": null,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "FAILED",
+      "adjudication_status": "NON_ADJUDICABLE_VALIDATION_FAILURE",
+      "finding_alignment": null,
+      "evidence_discipline": null,
+      "category_relevance": null,
+      "severity_calibration": null,
+      "engineering_usefulness": null,
+      "overall_judgment": null,
+      "notes": "Observability LLM review failed: OpenAI structured generation failed.",
+      "llm_evidence_basis": null,
+      "llm_severity_hint": null,
+      "llm_confidence": null,
+      "llm_category_relevance_note": null,
+      "llm_score_rationale": null,
+      "llm_severity_rationale": null,
+      "failure_diagnostics": {
+        "exception_class": "ValidationError",
+        "exception_module": "pydantic_core._pydantic_core",
+        "message": "1 validation error for ObservabilityReviewerLLMResult\nfindings.1\n  Value error, NOT_SPECIFIED finding statements must not assert proven absence. [type=value_error, input_value={'statement': 'There is n...oss system components.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+        "validation_errors": [
+          {
+            "loc": [
+              "findings",
+              "1"
+            ],
+            "type": "value_error",
+            "msg": "Value error, NOT_SPECIFIED finding statements must not assert proven absence.",
+            "input": {
+              "statement": "There is no specified structured logging approach or contextual logging for the FastAPI backend or React frontend.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "severity_hint": "MEDIUM",
+              "confidence": 85,
+              "category_relevance_note": "Lack of structured logs limits error diagnosis and correlation across system components."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "financial-copilot",
+      "scenario_name": "Financial Copilot",
+      "category": "Cost",
+      "reference_severity": "HIGH",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "HIGH",
+      "llm_score": 6,
+      "deterministic_score": 8,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "GROUNDED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Cost controls and risk drivers are clearly identified with focused, actionable recommendations.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "OBSERVED",
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "HIGH",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "llm_confidence": [
+        90,
+        85,
+        90,
+        75,
+        70,
+        80
+      ],
+      "llm_category_relevance_note": [
+        "Model usage drives major cost.",
+        "Vector DB query frequency and caching affect costs.",
+        "Caching can significantly cut model and retrieval costs.",
+        "Cost control mechanisms prevent unexpected bills.",
+        "Compute scaling controls impact cost efficiency.",
+        "Cost runaway risk from unmonitored usage."
+      ],
+      "llm_score_rationale": "Moderate traffic and expensive LLM + embedding and vector DB usage together pose significant cost drivers. Lack of caching and cost controls means costs will scale inefficiently. These issues warrant a mid-level score reflecting important cost risks but not fundamental blockers yet.",
+      "llm_severity_rationale": "High severity findings around per-request model costs without caching highlight major spend drivers. Medium severity on vector DB and lack of cost control also materially affect production cost risk, justifying an overall medium-high severity profile."
+    },
+    {
+      "scenario_id": "enterprise-search",
+      "scenario_name": "Enterprise Search",
+      "category": "Security",
+      "reference_severity": "CRITICAL",
+      "llm_severity": "CRITICAL",
+      "deterministic_severity": "HIGH",
+      "llm_score": 3,
+      "deterministic_score": 6,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "GROUNDED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Critical security blockers are directly observed and accurately prioritized.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "CRITICAL",
+        "CRITICAL",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "CRITICAL"
+      ],
+      "llm_confidence": [
+        90,
+        85,
+        70,
+        65,
+        75,
+        85
+      ],
+      "llm_category_relevance_note": [
+        "Directly impacts access security for all components.",
+        "Prevents timely detection of compromise or abuse.",
+        "May allow unauthorized data access or actions if absent.",
+        "Could lead to denial of service or exploitation if not implemented.",
+        "Increases risk of credential leakage or misuse.",
+        "Combines multiple missing controls increasing overall risk."
+      ],
+      "llm_score_rationale": "The lack of any authentication and monitoring controls justify a very low score (3), reflecting critical gaps that prevent safe deployment in production environments.",
+      "llm_severity_rationale": "Observed absences of authentication and monitoring carry critical severity due to high likelihood of exploitation and large potential impact. Medium severity is applied to unspecified areas needing validation, but the combined missing controls escalate overall risk."
+    },
+    {
+      "scenario_id": "enterprise-search",
+      "scenario_name": "Enterprise Search",
+      "category": "Scalability",
+      "reference_severity": "HIGH",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "MEDIUM",
+      "llm_score": 4,
+      "deterministic_score": 9,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "SOME_LEAKAGE",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Scalability risks are relevant, but references to non-scalability controls introduce mild leakage.",
+      "llm_evidence_basis": [
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "OBSERVED",
+        "NOT_SPECIFIED"
+      ],
+      "llm_severity_hint": [
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM"
+      ],
+      "llm_confidence": [
+        90,
+        80,
+        85,
+        95,
+        85
+      ],
+      "llm_category_relevance_note": [
+        "Monitoring is essential to identify scaling bottlenecks and degradation under load.",
+        "Authentication impacts control over traffic concurrency and abuse, affecting scalability.",
+        "Horizontal scale-out is typically required for handling higher concurrency in backend services.",
+        "LLM inference capacity could saturate impacting throughput under high load.",
+        "Cache and vector DB scaling are critical to maintain low latency and throughput as traffic grows."
+      ],
+      "llm_score_rationale": "Score of 4 reflects presence of some scalable components but important gaps such as missing monitoring, authentication, and unclear scaling strategies for backend and database components.",
+      "llm_severity_rationale": "Severity hints are primarily MEDIUM due to observed dependencies and unspecified scaling controls that create moderate risk of capacity saturation impacting system scalability."
+    },
+    {
+      "scenario_id": "enterprise-search",
+      "scenario_name": "Enterprise Search",
+      "category": "Reliability",
+      "reference_severity": "HIGH",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "HIGH",
+      "llm_score": 4,
+      "deterministic_score": 6,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "SOME_LEAKAGE",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Reliability concerns are useful but include adjacent security-control framing.",
+      "llm_evidence_basis": [
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "MEDIUM",
+        "MEDIUM",
+        "HIGH",
+        "MEDIUM",
+        "HIGH",
+        "HIGH"
+      ],
+      "llm_confidence": [
+        90,
+        85,
+        90,
+        80,
+        85,
+        80
+      ],
+      "llm_category_relevance_note": [
+        "Lack of monitoring impacts incident detection and recovery processes, critical for reliability.",
+        "Absence of authentication affects secure service operation and may indirectly impact reliability under attack or misuse.",
+        "Missing failure handling strategies for external providers poses significant reliability risk.",
+        "Cache failures without mitigation could increase load on backend and cause service degradation.",
+        "External APIs including OpenAI are often subject to transient failures or rate limits.",
+        "Operational visibility is critical to reliability and outage management."
+      ],
+      "llm_score_rationale": "The absence of monitoring, authentication, and explicit failure handling represents important reliability gaps. The moderate traffic load increases blast radius potential. While the architecture uses common robust components, missing operational controls and dependency failure mitigations reduce overall reliability potential, justifying a score in the mid range.",
+      "llm_severity_rationale": "Severity ratings range from medium to high due to critical missing failure handling and operational visibility. The high severity arises from dependence on external services without fallback and no monitoring. Medium severity applies to missing authentication and caching details, which indirectly affect reliability."
+    },
+    {
+      "scenario_id": "enterprise-search",
+      "scenario_name": "Enterprise Search",
+      "category": "Observability",
+      "reference_severity": "CRITICAL",
+      "llm_severity": "CRITICAL",
+      "deterministic_severity": "HIGH",
+      "llm_score": 3,
+      "deterministic_score": 7,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "GROUNDED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Observability failures are explicit and severity is correctly calibrated for production readiness.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "CRITICAL",
+        "HIGH",
+        "HIGH",
+        "CRITICAL"
+      ],
+      "llm_confidence": [
+        95,
+        90,
+        85,
+        90
+      ],
+      "llm_category_relevance_note": [
+        "Lack of monitoring is a fundamental observability gap impacting all dimensions.",
+        "These critical observability features are not described, raising concerns about diagnosability.",
+        "Given use of an external LLM and vector DB, model and API telemetry is important for operational confidence.",
+        "No compensating controls are evident, increasing blast radius of potential outages."
+      ],
+      "llm_score_rationale": "A score of 3 reflects the explicit absence of monitoring and unspecified visibility features that are critical for production readiness at significant traffic volume.",
+      "llm_severity_rationale": "CRITICAL severity is assigned due to direct observation of no monitoring, a foundational requirement. High severity applies to unspecified but essential observability capabilities, and inferred high risk is noted due to operational impact potential."
+    },
+    {
+      "scenario_id": "enterprise-search",
+      "scenario_name": "Enterprise Search",
+      "category": "Cost",
+      "reference_severity": "HIGH",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "MEDIUM",
+      "llm_score": 5,
+      "deterministic_score": 9,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "SOME_LEAKAGE",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "MEDIUM",
+      "overall_judgment": "MIXED",
+      "notes": "Cost direction is useful, but cross-category blending and broadness reduce precision.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "OBSERVED",
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "MEDIUM",
+        "HIGH",
+        "LOW",
+        "MEDIUM",
+        "LOW",
+        "HIGH"
+      ],
+      "llm_confidence": [
+        90,
+        90,
+        90,
+        70,
+        70,
+        80
+      ],
+      "llm_category_relevance_note": [
+        "Inhibits cost visibility and management, risking runaway spend.",
+        "Unrestricted access could lead to unexpected high costs due to abuse or inadvertent overuse.",
+        "Caching reduces repeated vector db and LLM calls, saving costs.",
+        "Important for controlling OpenAI API spend at scale.",
+        "Could impact cost if unused compute is provisioned or over-provisioned.",
+        "Growth impact on cost is a major risk without governance controls."
+      ],
+      "llm_score_rationale": "Presence of caching and vector DB indicates some cost awareness, but missing monitoring and authentication controls pose significant risk of uncontrolled costs.",
+      "llm_severity_rationale": "High severity due to confirmed absence of key cost controls (monitoring, authentication) that create direct risks of runaway spending and inability to manage costs effectively."
+    },
+    {
+      "scenario_id": "multi-agent-research",
+      "scenario_name": "Multi-Agent Research System",
+      "category": "Security",
+      "reference_severity": "HIGH",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "LOW",
+      "llm_score": 5,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Security findings are relevant and useful, with minor evidence-basis inflation on some unspecified points.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "OBSERVED"
+      ],
+      "llm_severity_hint": [
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "llm_confidence": [
+        90,
+        80,
+        85,
+        95
+      ],
+      "llm_category_relevance_note": [
+        "Authorization is critical to limit access and enforce least privilege.",
+        "AI endpoint abuse could lead to resource exhaustion or unauthorized access.",
+        "Improper key handling could lead to credential leakage.",
+        "Lack of monitoring hinders timely detection and response to attacks."
+      ],
+      "llm_score_rationale": "JWT authentication is present but important security components like authorization, monitoring, and secrets management are missing or unspecified, reducing confidence in security posture.",
+      "llm_severity_rationale": "High severity assigned to missing monitoring due to inability to detect/respond; medium severity for missing authorization and secrets handling due to potential impactful risks yet partial compensating presence of JWT authentication."
+    },
+    {
+      "scenario_id": "multi-agent-research",
+      "scenario_name": "Multi-Agent Research System",
+      "category": "Scalability",
+      "reference_severity": "HIGH",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "LOW",
+      "llm_score": 5,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "SOME_LEAKAGE",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Scalability treatment is actionable; observability framing appears intermittently.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "OBSERVED",
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "MEDIUM",
+        "LOW",
+        "MEDIUM",
+        "MEDIUM",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "llm_confidence": [
+        90,
+        95,
+        90,
+        85,
+        85,
+        80
+      ],
+      "llm_category_relevance_note": [
+        "Vector DB performance critical for AI retrieval throughput.",
+        "Caching is beneficial for scalability but details on cache hit rates and invalidation are not provided.",
+        "Monitoring is key to scaling and adjusting resources dynamically.",
+        "Scaling strategies are important to handle concurrency and throughput increase.",
+        "Backpressure and queueing can protect system from overload.",
+        "Inference model capacity is a common bottleneck in AI systems."
+      ],
+      "llm_score_rationale": "Basic scalable components are present (such as cache and multiple LLMs), but lack of explicit scaling plans, missing monitoring, and potential DB bottlenecks justify a mid-range score reflecting significant gaps requiring attention.",
+      "llm_severity_rationale": "Medium severity findings predominate, reflecting important but not catastrophic scalability gaps. The inferred risk on inference saturation is high severity due to likely serious impact if unaddressed."
+    },
+    {
+      "scenario_id": "multi-agent-research",
+      "scenario_name": "Multi-Agent Research System",
+      "category": "Reliability",
+      "reference_severity": "HIGH",
+      "llm_severity": "HIGH",
+      "deterministic_severity": "HIGH",
+      "llm_score": 5,
+      "deterministic_score": 6,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "MIXED",
+      "category_relevance": "SOME_LEAKAGE",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Reliability analysis is practical but blends in adjacent control concerns.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "OBSERVED",
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "OBSERVED",
+        "OBSERVED"
+      ],
+      "llm_severity_hint": [
+        "HIGH",
+        "MEDIUM",
+        "HIGH",
+        "MEDIUM",
+        "MEDIUM",
+        "LOW"
+      ],
+      "llm_confidence": [
+        90,
+        85,
+        90,
+        75,
+        80,
+        90
+      ],
+      "llm_category_relevance_note": [
+        "Lack of monitoring impairs detection and mitigation of failures, increasing operational risk.",
+        "Lack of failure handling mechanisms can cause degraded service or cascading failures under transient issues.",
+        "Single points of failure can cause complete service outages.",
+        "Unclear how service restoration occurs after failure or restart.",
+        "Potential for degraded performance or unhandled errors if individual LLMs fail.",
+        "Authentication affects security more than reliability here."
+      ],
+      "llm_score_rationale": "Absence of critical reliability features such as monitoring, failover, and failure handling mechanisms justify a moderate reliability score with important gaps.",
+      "llm_severity_rationale": "High severity findings around monitoring and single points of failure combined with medium severity risks for failure handling and recovery support an overall medium-high severity rating."
+    },
+    {
+      "scenario_id": "multi-agent-research",
+      "scenario_name": "Multi-Agent Research System",
+      "category": "Observability",
+      "reference_severity": "CRITICAL",
+      "llm_severity": "CRITICAL",
+      "deterministic_severity": "HIGH",
+      "llm_score": 3,
+      "deterministic_score": 7,
+      "reviewer": "human",
+      "llm_status": "SUCCESS",
+      "adjudication_status": "ADJUDICATED",
+      "finding_alignment": "STRONG",
+      "evidence_discipline": "GROUNDED",
+      "category_relevance": "FOCUSED",
+      "severity_calibration": "CALIBRATED",
+      "engineering_usefulness": "HIGH",
+      "overall_judgment": "STRONG",
+      "notes": "Observability deficiencies are clearly grounded, focused, and appropriately severe.",
+      "llm_evidence_basis": [
+        "OBSERVED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "NOT_SPECIFIED",
+        "INFERRED_RISK"
+      ],
+      "llm_severity_hint": [
+        "CRITICAL",
+        "HIGH",
+        "HIGH",
+        "HIGH",
+        "HIGH",
+        "CRITICAL"
+      ],
+      "llm_confidence": [
+        90,
+        80,
+        80,
+        80,
+        75,
+        85
+      ],
+      "llm_category_relevance_note": [
+        "Lack of monitoring directly impacts ability to detect and diagnose incidents.",
+        "Such metrics are essential for baseline health and performance visibility.",
+        "These are critical for diagnosing cross-component and AI model behavior issues.",
+        "Visibility into model/API calls is important given multiple LLMs integration.",
+        "Alerting reduces time to detect and respond to issues.",
+        "In a complex multi-agent AI system handling 8000 traffic, visibility gaps raise operational risk."
+      ],
+      "llm_score_rationale": "The explicit absence of any monitoring combined with missing information on all key observability facets justifies a very low score of 3, reflecting critical gaps to address before production confidence.",
+      "llm_severity_rationale": "Severity is rated critical because monitoring and observability are foundational for detection and diagnosis; without them, operational risk and incident impact escalate considerably."
+    },
+    {
+      "scenario_id": "multi-agent-research",
+      "scenario_name": "Multi-Agent Research System",
+      "category": "Cost",
+      "reference_severity": "HIGH",
+      "llm_severity": null,
+      "deterministic_severity": "LOW",
+      "llm_score": null,
+      "deterministic_score": 10,
+      "reviewer": "human",
+      "llm_status": "FAILED",
+      "adjudication_status": "NON_ADJUDICABLE_VALIDATION_FAILURE",
+      "finding_alignment": null,
+      "evidence_discipline": null,
+      "category_relevance": null,
+      "severity_calibration": null,
+      "engineering_usefulness": null,
+      "overall_judgment": null,
+      "notes": "Cost LLM review failed: OpenAI structured generation failed.",
+      "llm_evidence_basis": null,
+      "llm_severity_hint": null,
+      "llm_confidence": null,
+      "llm_category_relevance_note": null,
+      "llm_score_rationale": null,
+      "llm_severity_rationale": null,
+      "failure_diagnostics": {
+        "exception_class": "ValidationError",
+        "exception_module": "pydantic_core._pydantic_core",
+        "message": "1 validation error for CostReviewerLLMResult\nfindings.2\n  Value error, NOT_SPECIFIED finding statements must not combine uncertainty with inferred impact; use separate INFERRED_RISK finding. [type=value_error, input_value={'statement': 'Autoscalin... request traffic level'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+        "validation_errors": [
+          {
+            "loc": [
+              "findings",
+              "2"
+            ],
+            "type": "value_error",
+            "msg": "Value error, NOT_SPECIFIED finding statements must not combine uncertainty with inferred impact; use separate INFERRED_RISK finding.",
+            "input": {
+              "statement": "Autoscaling behavior and resource utilization efficiency are not specified, creating uncertainty about cost optimization under varying traffic loads.",
+              "evidence_basis": "NOT_SPECIFIED",
+              "severity_hint": "MEDIUM",
+              "confidence": 70,
+              "category_relevance_note": "Autoscaling impacts compute cost efficiency at 8000 request traffic level"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

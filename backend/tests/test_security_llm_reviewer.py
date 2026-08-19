@@ -7,6 +7,9 @@ from app.reviewers.security_llm import SecurityLLMReviewer
 from app.schemas.review import (
     ArchitectureReviewRequest,
     BoardVote,
+    EvidenceBasis,
+    LLMReviewerFinding,
+    Severity,
     SecurityReviewerLLMResult,
 )
 from app.services.llm.provider import LLMProvider
@@ -33,9 +36,17 @@ class SecurityLLMReviewerTests(unittest.TestCase):
             score=8,
             summary="Security posture has concerns.",
             engineering_reasoning="Monitoring and auth hardening are incomplete.",
-            risks=["Weak incident visibility"],
+            findings=[
+                LLMReviewerFinding(
+                    statement="Weak incident visibility",
+                    evidence_basis=EvidenceBasis.OBSERVED,
+                    severity_hint=Severity.MEDIUM,
+                )
+            ],
             recommendations=["Add security telemetry"],
             estimated_impact="Delayed detection and higher abuse risk.",
+            score_rationale="One observed visibility gap with moderate operational impact.",
+            severity_rationale="Observed detection weakness elevates exploit dwell time.",
         )
 
         reviewer = SecurityLLMReviewer(provider, confidence=84)
@@ -59,9 +70,17 @@ class SecurityLLMReviewerTests(unittest.TestCase):
             score=9,
             summary="Strong posture.",
             engineering_reasoning="Core controls are present.",
-            risks=[],
+            findings=[
+                LLMReviewerFinding(
+                    statement="Token policy is not specified; validate rotation.",
+                    evidence_basis=EvidenceBasis.NOT_SPECIFIED,
+                    severity_hint=Severity.LOW,
+                )
+            ],
             recommendations=["Continue periodic reviews"],
             estimated_impact="Low near-term exploitability risk.",
+            score_rationale="Mostly strong posture with only minor unspecified detail.",
+            severity_rationale="Unspecified detail is low impact with compensating controls.",
         )
 
         category = SecurityLLMReviewer(provider).review(self.request)
@@ -75,9 +94,17 @@ class SecurityLLMReviewerTests(unittest.TestCase):
             "score": 99,
             "summary": "bad",
             "engineering_reasoning": "bad",
-            "risks": ["risk"],
+            "findings": [
+                {
+                    "statement": "risk",
+                    "evidence_basis": "OBSERVED",
+                    "severity_hint": "MEDIUM",
+                }
+            ],
             "recommendations": ["fix"],
             "estimated_impact": "impact",
+            "score_rationale": "bad",
+            "severity_rationale": "bad",
         }
 
         with self.assertRaises(ValidationError):

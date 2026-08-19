@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from app.reviewers.base import BaseReviewer
-from app.reviewers.llm_shared import run_llm_category_review
+from app.reviewers.llm_shared import build_calibrated_instruction, run_llm_category_review
 from app.schemas.review import (
     ArchitectureReviewRequest,
     CategoryReview,
@@ -11,7 +11,7 @@ from app.schemas.review import (
 )
 from app.services.llm.provider import LLMProvider
 
-_COST_SYSTEM_INSTRUCTION = """
+_COST_BASE_SYSTEM_INSTRUCTION = """
 You are the Cost reviewer for PreFlight AI's architecture Design Review Board.
 Evaluate ONLY cost-efficiency and cost-risk characteristics of the submitted architecture.
 
@@ -46,6 +46,14 @@ Reason from the architecture as given; do not assume every system requires every
 Return only the structured fields requested by the response schema.
 Keep risks and recommendations concise and actionable.
 """.strip()
+
+_COST_SYSTEM_INSTRUCTION = build_calibrated_instruction(
+    base_instruction=_COST_BASE_SYSTEM_INSTRUCTION,
+    boundary_reminder=(
+        "Do not convert pure observability, reliability, or security concerns into cost "
+        "findings unless they directly drive material spend risk."
+    ),
+)
 
 
 class CostLLMReviewer(BaseReviewer):

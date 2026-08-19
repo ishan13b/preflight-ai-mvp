@@ -2,7 +2,12 @@ import unittest
 
 from pydantic import ValidationError
 
-from app.schemas.review import SecurityReviewerLLMResult
+from app.schemas.review import (
+    EvidenceBasis,
+    LLMReviewerFinding,
+    SecurityReviewerLLMResult,
+    Severity,
+)
 
 
 class SecurityLLMResultValidationTests(unittest.TestCase):
@@ -11,9 +16,17 @@ class SecurityLLMResultValidationTests(unittest.TestCase):
             score=8,
             summary="Security posture is acceptable with risks.",
             engineering_reasoning="JWT is present but monitoring controls are limited.",
-            risks=["Insufficient incident tracing"],
+            findings=[
+                LLMReviewerFinding(
+                    statement="Insufficient incident tracing",
+                    evidence_basis=EvidenceBasis.OBSERVED,
+                    severity_hint=Severity.MEDIUM,
+                )
+            ],
             recommendations=["Add security event monitoring"],
             estimated_impact="Incidents may take longer to detect and contain.",
+            score_rationale="Observed traceability gap with bounded impact.",
+            severity_rationale="Likely slower detection but manageable blast radius.",
         )
 
         self.assertEqual(result.score, 8)
@@ -24,9 +37,17 @@ class SecurityLLMResultValidationTests(unittest.TestCase):
                 score=99,
                 summary="bad",
                 engineering_reasoning="bad",
-                risks=["risk"],
+                findings=[
+                    LLMReviewerFinding(
+                        statement="risk",
+                        evidence_basis=EvidenceBasis.INFERRED_RISK,
+                        severity_hint=Severity.HIGH,
+                    )
+                ],
                 recommendations=["fix"],
                 estimated_impact="impact",
+                score_rationale="bad",
+                severity_rationale="bad",
             )
 
 
